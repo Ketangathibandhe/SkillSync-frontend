@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
+import AboutSection from "./AboutSection";
 const Login = () => {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +26,8 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-      dispatch(addUser(res.data));
+      //dispatch(addUser(res.data));
+      dispatch(addUser(res.data.user));
       navigate("/");
     } catch (error) {
       setError(error?.request?.response || "Something went wrong");
@@ -41,13 +43,14 @@ const Login = () => {
         { withCredentials: true }
       );
       dispatch(addUser(res.data.data));
-      return navigate("/profile");
+      return navigate("/");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong");
     }
   };
 
   return (
+    <>
     <div className="flex justify-center my-10">
       <div className="card bg-base-300 w-96 shadow-sm">
         <div className="card-body">
@@ -135,6 +138,8 @@ const Login = () => {
         </div>
       </div>
     </div>
+    <AboutSection/>
+    </>
   );
 };
 
