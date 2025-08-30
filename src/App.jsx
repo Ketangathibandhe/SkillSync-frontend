@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import Login from "./components/Login";
 import EditProfile from "./components/EditProfile";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
+import Text from "./components/Text";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Home/>}>
+            <Route path="/" element={<Text/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<EditProfile/>} />
             <Route path="/forgotpassword" element={<ForgotPasswordForm/>} />
