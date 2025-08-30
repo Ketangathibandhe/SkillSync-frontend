@@ -72,7 +72,6 @@
 
 // export default NavBar;
 
-
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom"; // ✅ fix: useRouter → useRouterDom
 import { BASE_URL } from "../utils/constants";
@@ -87,7 +86,11 @@ function NavBar() {
 
   const handleLogout = async () => {
     try {
-      await axios.post(BASE_URL + "/api/auth/logout", {}, { withCredentials: true });
+      await axios.post(
+        BASE_URL + "/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
       dispatch(removeUser());
       navigate("/login");
     } catch (err) {
@@ -106,7 +109,11 @@ function NavBar() {
             {user ? user.firstName : "Login"}
           </p>
           <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
               <div className="w-10 rounded-full">
                 <img
                   alt="User photo"
@@ -126,6 +133,9 @@ function NavBar() {
                 <Link to="/profile" className="justify-between">
                   Profile
                   <span className="badge">New</span>
+                </Link>
+                <Link to="/forgotpassword" className="justify-between">
+                  ForgotPassword
                 </Link>
               </li>
               <li>

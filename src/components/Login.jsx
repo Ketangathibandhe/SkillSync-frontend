@@ -12,6 +12,8 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -43,7 +45,7 @@ const Login = () => {
         { withCredentials: true }
       );
       dispatch(addUser(res.data.data));
-      return navigate("/");
+      return navigate("/profile");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong");
     }
@@ -51,94 +53,104 @@ const Login = () => {
 
   return (
     <>
-    <div className="flex justify-center my-10">
-      <div className="card bg-base-300 w-96 shadow-sm">
-        <div className="card-body">
-          <h2 className="card-title justify-center text-green-400 font-bold text-2xl">
-            {isLoginForm ? "Login" : "SignUp"}
-          </h2>
-          <div>
-            {!isLoginForm && (
-              <>
-                <div className="my-5">
-                  <label className="form-control w-full max-w-xs py-4">
-                    <div className="label">
-                      <span className="label-text px-1"> First Name</span>
-                    </div>
-                    <input
-                      type="text"
-                      value={firstName}
-                      className="input input-bordered w-full max-w-xs"
-                      onChange={(e) => setFirstName(e.target.value)}
-                    />
-                  </label>
-                </div>
-
-                <div className="my-5">
-                  <label className="form-control w-full max-w-xs py-4">
-                    <div className="label">
-                      <span className="label-text px-1"> Last Name</span>
-                    </div>
-                    <input
-                      type="text"
-                      value={lastName}
-                      className="input input-bordered w-full max-w-xs"
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
-                  </label>
-                </div>
-              </>
-            )}
-
-            <div className="my-5">
-              <label className="form-control w-full max-w-xs py-4">
-                <div className="label">
-                  <span className="label-text px-1"> Email ID</span>
-                </div>
-                <input
-                  type="text"
-                  value={emailId}
-                  className="input input-bordered w-full max-w-xs"
-                  onChange={(e) => setEmailId(e.target.value)}
-                />
-              </label>
-            </div>
-
-            <div className="my-5">
-              <label className=" form-control w-full max-w-xs ">
-                <div className="label ">
-                  <span className="label-text px-1"> Password</span>
-                </div>
-                <input
-                  type="password"
-                  value={password}
-                  className="input input-bordered w-full max-w-xs"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </label>
-            </div>
-          </div>
-          <p className="text-red-400">{error}</p>
-          <div className="card-actions justify-center">
-            <button
-              className="btn bg-green-400 text-black  px-4 py-2 font-bold rounded-xl"
-              onClick={isLoginForm ? handleLogin : handleSignUp}
-            >
+      <div className="flex justify-center my-10">
+        <div className="card bg-base-300 w-96 shadow-sm">
+          <div className="card-body">
+            <h2 className="card-title justify-center text-green-400 font-bold text-2xl">
               {isLoginForm ? "Login" : "SignUp"}
-            </button>
+            </h2>
+            <div>
+              {!isLoginForm && (
+                <>
+                  <div className="my-5">
+                    <label className="form-control w-full max-w-xs py-4">
+                      <div className="label">
+                        <span className="label-text px-1"> First Name</span>
+                      </div>
+                      <input
+                        type="text"
+                        value={firstName}
+                        className="input input-bordered w-full max-w-xs"
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
+                    </label>
+                  </div>
+
+                  <div className="my-5">
+                    <label className="form-control w-full max-w-xs py-4">
+                      <div className="label">
+                        <span className="label-text px-1"> Last Name</span>
+                      </div>
+                      <input
+                        type="text"
+                        value={lastName}
+                        className="input input-bordered w-full max-w-xs"
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </label>
+                  </div>
+                </>
+              )}
+
+              <div className="my-5">
+                <label className="form-control w-full max-w-xs py-4">
+                  <div className="label">
+                    <span className="label-text px-1"> Email ID</span>
+                  </div>
+                  <input
+                    type="text"
+                    value={emailId}
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={(e) => setEmailId(e.target.value)}
+                  />
+                </label>
+              </div>
+
+              <div className="my-5">
+                <label className=" form-control w-full max-w-xs ">
+                  <div className="label ">
+                    <span className="label-text px-1"> Password</span>
+                  </div>
+                  <div className="relative w-full max-w-xs">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="input input-bordered w-full pr-14 focus:outline-none"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400 hover:text-green-600 text-sm z-20 bg-transparent"
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <p className="text-red-400">{error}</p>
+            <div className="card-actions justify-center">
+              <button
+                className="btn bg-green-400 text-black  px-4 py-2 font-bold rounded-xl"
+                onClick={isLoginForm ? handleLogin : handleSignUp}
+              >
+                {isLoginForm ? "Login" : "SignUp"}
+              </button>
+            </div>
+            <p
+              className=" pt-2 text-center cursor-pointer"
+              onClick={() => setIsLoginForm((value) => !value)}
+            >
+              {isLoginForm
+                ? "New User? SignUp Here"
+                : "Existing User? Login Here"}
+            </p>
           </div>
-          <p
-            className=" pt-2 text-center cursor-pointer"
-            onClick={() => setIsLoginForm((value) => !value)}
-          >
-            {isLoginForm
-              ? "New User? SignUp Here"
-              : "Existing User? Login Here"}
-          </p>
         </div>
       </div>
-    </div>
-    <AboutSection/>
+      <AboutSection />
     </>
   );
 };
