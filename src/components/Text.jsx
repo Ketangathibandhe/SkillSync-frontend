@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SkillGapForm from "./SkillGapForm";
 const Text = () => {
   const [text, setText] = useState("Hello");
   const userData = useSelector((store) => store.user);
@@ -11,6 +12,7 @@ const Text = () => {
   }, [userData?.firstName]);
 
   return (
+    <div>
     <div className="flex items-center justify-center  font-sans relative overflow-hidden">
       <h1
         className="mt-7 text-4xl sm:text-5xl md:text-5xl lg:text-5xl font-semibold whitespace-nowrap text-transparent bg-clip-text"
@@ -32,6 +34,9 @@ const Text = () => {
           }
         `}
       </style>
+      
+    </div>
+    <SkillGapForm/>
     </div>
   );
 };
