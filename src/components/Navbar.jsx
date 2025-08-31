@@ -4,6 +4,7 @@ import { BASE_URL } from "../utils/constants";
 import axios from "axios";
 import light from "../images/light.PNG";
 import { removeUser } from "../utils/userSlice";
+import { resetSkillState } from "../utils/skillSlice";
 
 function NavBar() {
   const user = useSelector((store) => store.user);
@@ -18,6 +19,7 @@ function NavBar() {
         { withCredentials: true }
       );
       dispatch(removeUser());
+        dispatch(resetSkillState());
       navigate("/login");
     } catch (err) {
       console.error("Logout failed", err);
