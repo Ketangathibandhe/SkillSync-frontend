@@ -8,7 +8,7 @@ import Login from "./components/Login";
 import EditProfile from "./components/EditProfile";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
 import Text from "./components/Text";
-
+import RoadmapPage from "./components/RoadmapPage";
 function App() {
   return (
     <Provider store={appStore}>
@@ -19,6 +19,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<EditProfile/>} />
             <Route path="/forgotpassword" element={<ForgotPasswordForm/>} />
+             <Route path="/roadmap" element={<RoadmapPage />} />
+
           </Route>
         </Routes>
       </BrowserRouter>

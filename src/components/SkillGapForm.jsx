@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   setTargetRole,
   setCurrentSkills,
@@ -30,9 +31,13 @@ const SkillGapForm = () => {
     dispatch(analyzeSkillGap({ targetRole, currentSkills }));
   };
 
-  const handleRoadmap = () => {
-    dispatch(generateRoadmap({ targetRole, currentSkills }));
-  };
+const navigate = useNavigate();
+
+const handleRoadmap = async () => {
+  await dispatch(generateRoadmap({ targetRole, currentSkills }));
+  navigate("/roadmap");
+};
+
 
   return (
     <div className="mb-20 mt-4 w-full max-w-full lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 bg-white rounded-xl shadow-lg text-black">
