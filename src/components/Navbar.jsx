@@ -61,6 +61,16 @@ function NavBar() {
               Profile <span className="badge">New</span>
             </Link>
           </li>
+           <li>
+            <Link to="/roadmap" className="justify-between">
+              Saved Roadmaps
+            </Link>
+          </li>
+               <li>
+            <Link to="/" className="justify-between">
+              SkillGap Analysis
+            </Link>
+          </li>
           <li>
             <Link to="/forgotpassword" className="justify-between">
               ForgotPassword

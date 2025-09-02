@@ -36,11 +36,52 @@ export const generateRoadmap = createAsyncThunk(
   }
 );
 
+// ✅ Fetch all roadmaps for sidebar
+export const fetchUserRoadmaps = createAsyncThunk(
+  "skill/fetchUserRoadmaps",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/ai/roadmaps`, { withCredentials: true });
+      return res.data.roadmaps;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+// ✅ Fetch single roadmap by ID
+export const fetchRoadmapById = createAsyncThunk(
+  "skill/fetchRoadmapById",
+  async (roadmapId, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/ai/roadmap/${roadmapId}`, { withCredentials: true });
+      return res.data.roadmap;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+// ✅ Fetch latest roadmap (default load)
+export const fetchLatestRoadmap = createAsyncThunk(
+  "skill/fetchLatestRoadmap",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/ai/roadmaps/latest`, { withCredentials: true });
+      return res.data.roadmap;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
 const initialState = {
   targetRole: "",
   currentSkills: [],
   gapAnalysis: "",
-  roadmap: null,
+  roadmap: null,           // old single roadmap (can be removed later)
+  userRoadmaps: [],        // ✅ sidebar list
+  selectedRoadmap: null,   // ✅ currently viewed roadmap
   loading: false,
   error: null,
 };
@@ -55,10 +96,11 @@ const skillSlice = createSlice({
     setCurrentSkills: (state, action) => {
       state.currentSkills = action.payload;
     },
-    resetSkillState: () => initialState, // 👈 Add this reducer
+    resetSkillState: () => initialState,
   },
   extraReducers: (builder) => {
     builder
+      // Analyze Skill Gap
       .addCase(analyzeSkillGap.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -71,6 +113,8 @@ const skillSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      // Generate Roadmap
       .addCase(generateRoadmap.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -80,6 +124,48 @@ const skillSlice = createSlice({
         state.roadmap = action.payload;
       })
       .addCase(generateRoadmap.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ✅ Fetch all roadmaps
+      .addCase(fetchUserRoadmaps.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserRoadmaps.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userRoadmaps = action.payload;
+      })
+      .addCase(fetchUserRoadmaps.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ✅ Fetch roadmap by ID
+      .addCase(fetchRoadmapById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRoadmapById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedRoadmap = action.payload;
+      })
+      .addCase(fetchRoadmapById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ✅ Fetch latest roadmap
+      .addCase(fetchLatestRoadmap.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchLatestRoadmap.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedRoadmap = action.payload;
+      })
+      .addCase(fetchLatestRoadmap.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
