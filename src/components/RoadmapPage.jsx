@@ -35,7 +35,7 @@ const RoadmapPage = () => {
       <div
         className="
           w-full md:w-64 
-          bg-gray-100 p-4 border-b md:border-b-0 md:border-r 
+          bg-green-100 p-4 border-b md:border-b-0 md:border-r 
           md:h-screen md:sticky md:top-0 
           overflow-y-auto
         "
@@ -111,7 +111,7 @@ const RoadmapPage = () => {
             {selectedRoadmap.steps.map((step, i) => (
               <div
                 key={i}
-                className="mb-4 p-4 border rounded bg-gray-100 text-black"
+                className="mb-4 p-4 border rounded bg-green-100 text-black"
               >
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{step.title}</h3>

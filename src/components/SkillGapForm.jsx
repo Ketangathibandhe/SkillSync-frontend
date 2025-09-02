@@ -10,10 +10,11 @@ import {
 
 const SkillGapForm = () => {
   const dispatch = useDispatch();
-  const { targetRole, currentSkills, gapAnalysis, roadmap, loading, error } =
+  const { targetRole, currentSkills, gapAnalysis, loading, error } =
     useSelector((state) => state.skill);
 
   const [skillInput, setSkillInput] = useState("");
+  const [validationError, setValidationError] = useState("");
 
   const handleSkillAdd = () => {
     if (skillInput.trim() !== "") {
@@ -27,20 +28,38 @@ const SkillGapForm = () => {
     dispatch(setCurrentSkills(updatedSkills));
   };
 
+  const validateFields = () => {
+    if (!targetRole.trim() && currentSkills.length === 0) {
+      setValidationError("Please enter a target role and add at least one skill.");
+      return false;
+    }
+    if (!targetRole.trim()) {
+      setValidationError("Please enter a target role.");
+      return false;
+    }
+    if (currentSkills.length === 0) {
+      setValidationError("Please add at least one skill.");
+      return false;
+    }
+    setValidationError("");
+    return true;
+  };
+
   const handleSkillGap = () => {
+    if (!validateFields()) return;
     dispatch(analyzeSkillGap({ targetRole, currentSkills }));
   };
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const handleRoadmap = async () => {
-  await dispatch(generateRoadmap({ targetRole, currentSkills }));
-  navigate("/roadmap");
-};
-
+  const handleRoadmap = async () => {
+    if (!validateFields()) return;
+    await dispatch(generateRoadmap({ targetRole, currentSkills }));
+    navigate("/roadmap");
+  };
 
   return (
-    <div className="mb-20 mt-4 w-full max-w-full lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 bg-white rounded-xl shadow-lg text-black">
+    <div className="mb-20 mt-4 w-full max-w-full lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 bg-green-100 rounded-xl shadow-lg text-black">
       <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-5 text-center">
         Skill Gap Analysis
       </h2>
@@ -58,7 +77,7 @@ const handleRoadmap = async () => {
       <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <input
           type="text"
-          placeholder="Add a skill (e.g., React)"
+          placeholder="Add Current skills (e.g., React ,Nodejs)"
           value={skillInput}
           onChange={(e) => setSkillInput(e.target.value)}
           className="border p-2 flex-grow rounded text-sm"
@@ -91,6 +110,11 @@ const handleRoadmap = async () => {
         ))}
       </div>
 
+      {/* Validation Error */}
+      {validationError && (
+        <p className="text-red-500 text-sm mb-3">{validationError}</p>
+      )}
+
       {/* Action Buttons */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
         <button
@@ -119,8 +143,6 @@ const handleRoadmap = async () => {
           <pre className="whitespace-pre-wrap break-words">{gapAnalysis}</pre>
         </div>
       )}
-
-
     </div>
   );
 };
