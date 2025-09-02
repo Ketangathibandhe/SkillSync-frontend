@@ -1,28 +1,53 @@
 import React from 'react';
-import aboutImage from '../images/about.png'; // Place your image in src/assets/
+import aboutImage from '../images/about.png';
 
 const AboutSection = () => {
   return (
-    <section className="bg-green-100 py-12 px-6 md:px-16 lg:px-24 flex flex-col-reverse md:flex-row items-center justify-between gap-10 rounded-xl mb-20">
+    <section className="bg-green-100 py-12 px-6 md:px-16 lg:px-24 flex flex-col-reverse md:flex-row items-center justify-between gap-10 rounded-xl mb-20 shadow-lg">
+      
       {/* Text Content */}
       <div className="max-w-xl">
-        <h2 className="text-4xl font-bold text-gray-800 mb-4">Welcome to <span className="text-blue-600">SkillSync</span></h2>
-        <p className="text-lg text-gray-700 mb-6">
-          SkillSync is your AI-powered mentorship platform built to bridge skill gaps with precision. Whether you're switching careers or leveling up, we craft personalized roadmaps tailored to your goals.
+        <h2 className="text-4xl font-bold text-gray-800 mb-4 leading-snug">
+          Empower Your Career with <span className="text-blue-600">SkillSync</span>
+        </h2>
+        
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          SkillSync is an <span className="font-semibold">AI-powered mentorship and learning platform </span> 
+          designed to close your skill gaps with precision. Whether you’re preparing for your dream role, 
+          switching careers, or aiming to level up, we deliver <span className="font-semibold">personalized, 
+          data-driven roadmaps</span> that keep you on track and motivated.
         </p>
-        <ul className="list-disc list-inside text-gray-600 space-y-2">
-          <li>Identify skill gaps with intelligent analysis</li>
-          <li>Get curated, role-based learning paths</li>
-          <li>Track progress with modular milestones</li>
+
+        <ul className="list-disc list-inside text-gray-700 space-y-3">
+          <li>
+            <span className="font-semibold">Smart Skill Gap Analysis:</span> Instantly identify missing skills 
+            for your target role using intelligent AI analysis.
+          </li>
+          <li>
+            <span className="font-semibold">Tailored Learning Roadmaps:</span> Get curated, role-specific 
+            learning paths with resources, projects, and timelines.
+          </li>
+          <li>
+            <span className="font-semibold">Progress Tracking:</span> Monitor your journey with interactive 
+            milestones, completion stats, and visual progress bars.
+          </li>
+          <li>
+            <span className="font-semibold">Multi-Device Access:</span> Learn and track progress anytime, 
+            anywhere — on desktop or mobile.
+          </li>
+          <li>
+            <span className="font-semibold">Mentorship-Ready:</span> Designed for future integration with 
+            expert mentors to guide you at every step.
+          </li>
         </ul>
       </div>
 
       {/* Image Section */}
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
         <img
           src={aboutImage}
-          alt="SkillSync illustration"
-          className="w-full h-auto rounded-lg "
+          alt="SkillSync platform illustration"
+          className="w-full h-auto rounded-lg"
         />
       </div>
     </section>

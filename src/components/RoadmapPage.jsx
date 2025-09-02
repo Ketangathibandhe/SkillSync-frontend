@@ -4,23 +4,30 @@ import {
   fetchUserRoadmaps,
   fetchLatestRoadmap,
   fetchRoadmapById,
-  deleteRoadmapById, 
+  deleteRoadmapById,
+  updateStepStatus,
 } from "../utils/skillSlice";
 
 const RoadmapPage = () => {
   const dispatch = useDispatch();
-  const {
-    userRoadmaps,
-    selectedRoadmap,
-    loading,
-    error,
-  } = useSelector((state) => state.skill);
+  const { userRoadmaps, selectedRoadmap, loading, error } = useSelector(
+    (state) => state.skill
+  );
 
-  // Load sidebar list + latest roadmap on mount
   useEffect(() => {
     dispatch(fetchUserRoadmaps());
     dispatch(fetchLatestRoadmap());
   }, [dispatch]);
+
+  const handleStatusChange = (stepIndex, checked) => {
+    dispatch(
+      updateStepStatus({
+        roadmapId: selectedRoadmap._id,
+        stepIndex,
+        status: checked ? "completed" : "pending",
+      })
+    );
+  };
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mb-14">
@@ -71,15 +78,51 @@ const RoadmapPage = () => {
 
         {selectedRoadmap && (
           <>
+            {/* Progress Bar with numbers */}
+            <div className="mb-6">
+              {(() => {
+                const totalSteps = selectedRoadmap.steps.length;
+                const completedSteps = selectedRoadmap.steps.filter(
+                  (s) => s.status === "completed"
+                ).length;
+                return (
+                  <div className="border pt-2 pb-3.5 px-2 rounded-2xl">
+                    <div className="flex items-center mb-1 text-2xl pl-4">
+                      <h4 className="font-semibold">Total Progress</h4>
+                      <span className="font-medium text-white pl-4 text-2xl">
+                        {completedSteps} / {totalSteps} ({selectedRoadmap.progress}%)
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-300 rounded-full h-4">
+                      <div
+                        className="bg-green-500 h-4 rounded-full transition-all duration-300"
+                        style={{ width: `${selectedRoadmap.progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+
             <h2 className="text-xl font-bold mb-4">
               {selectedRoadmap.targetRole}
             </h2>
+
             {selectedRoadmap.steps.map((step, i) => (
               <div
                 key={i}
                 className="mb-4 p-4 border rounded bg-gray-100 text-black"
               >
-                <h3 className="font-semibold">{step.title}</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">{step.title}</h3>
+                  <input
+                    type="checkbox"
+                    className="w-5 h-5 cursor-pointer accent-green-500"
+                    checked={step.status === "completed"}
+                    onChange={(e) => handleStatusChange(i, e.target.checked)}
+                  />
+                </div>
+
                 <p className="text-sm mb-2">Duration: {step.duration}</p>
 
                 {/* Topics */}

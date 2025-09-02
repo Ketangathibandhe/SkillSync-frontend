@@ -1,9 +1,10 @@
-// skillSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "./constants";
 
-// Async thunks
+// ================== Async thunks ==================
+
+// Analyze skill gap
 export const analyzeSkillGap = createAsyncThunk(
   "skill/analyzeSkillGap",
   async ({ targetRole, currentSkills }, { rejectWithValue }) => {
@@ -20,6 +21,7 @@ export const analyzeSkillGap = createAsyncThunk(
   }
 );
 
+// Generate roadmap
 export const generateRoadmap = createAsyncThunk(
   "skill/generateRoadmap",
   async ({ targetRole, currentSkills }, { rejectWithValue }) => {
@@ -41,7 +43,9 @@ export const fetchUserRoadmaps = createAsyncThunk(
   "skill/fetchUserRoadmaps",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/ai/roadmaps`, { withCredentials: true });
+      const res = await axios.get(`${BASE_URL}/api/ai/roadmaps`, {
+        withCredentials: true,
+      });
       return res.data.roadmaps;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -49,12 +53,14 @@ export const fetchUserRoadmaps = createAsyncThunk(
   }
 );
 
-//  Fetch single roadmap by ID
+// Fetch single roadmap by ID
 export const fetchRoadmapById = createAsyncThunk(
   "skill/fetchRoadmapById",
   async (roadmapId, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/ai/roadmap/${roadmapId}`, { withCredentials: true });
+      const res = await axios.get(`${BASE_URL}/api/ai/roadmap/${roadmapId}`, {
+        withCredentials: true,
+      });
       return res.data.roadmap;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -62,12 +68,14 @@ export const fetchRoadmapById = createAsyncThunk(
   }
 );
 
-//  Fetch latest roadmap (default load)
+// Fetch latest roadmap
 export const fetchLatestRoadmap = createAsyncThunk(
   "skill/fetchLatestRoadmap",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/ai/roadmaps/latest`, { withCredentials: true });
+      const res = await axios.get(`${BASE_URL}/api/ai/roadmaps/latest`, {
+        withCredentials: true,
+      });
       return res.data.roadmap;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -75,30 +83,51 @@ export const fetchLatestRoadmap = createAsyncThunk(
   }
 );
 
-// Delete roadmap by ID (DB + Redux state)
+// Delete roadmap
 export const deleteRoadmapById = createAsyncThunk(
   "skill/deleteRoadmapById",
   async (roadmapId, { rejectWithValue }) => {
     try {
-      await axios.delete(`${BASE_URL}/api/ai/roadmap/${roadmapId}`, { withCredentials: true });
-      return roadmapId; // return id so we can remove from state
+      await axios.delete(`${BASE_URL}/api/ai/roadmap/${roadmapId}`, {
+        withCredentials: true,
+      });
+      return roadmapId;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
     }
   }
 );
 
+// ✅ Update step status & recalc progress
+export const updateStepStatus = createAsyncThunk(
+  "skill/updateStepStatus",
+  async ({ roadmapId, stepIndex, status }, { rejectWithValue }) => {
+    try {
+      const res = await axios.put(
+        `${BASE_URL}/api/ai/roadmap/step-status`,
+        { roadmapId, stepIndex, status },
+        { withCredentials: true }
+      );
+      return res.data.roadmap;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+// ================== Initial State ==================
 const initialState = {
   targetRole: "",
   currentSkills: [],
   gapAnalysis: "",
-  roadmap: null,           
-  userRoadmaps: [],        //  sidebar list
-  selectedRoadmap: null,   // currently viewed roadmap
+  roadmap: null,
+  userRoadmaps: [],
+  selectedRoadmap: null,
   loading: false,
   error: null,
 };
 
+// ================== Slice ==================
 const skillSlice = createSlice({
   name: "skill",
   initialState,
@@ -141,7 +170,7 @@ const skillSlice = createSlice({
         state.error = action.payload;
       })
 
-      //  Fetch all roadmaps
+      // Fetch all roadmaps
       .addCase(fetchUserRoadmaps.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -155,7 +184,7 @@ const skillSlice = createSlice({
         state.error = action.payload;
       })
 
-      //  Fetch roadmap by ID
+      // Fetch roadmap by ID
       .addCase(fetchRoadmapById.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -169,7 +198,7 @@ const skillSlice = createSlice({
         state.error = action.payload;
       })
 
-      //  Fetch latest roadmap
+      // Fetch latest roadmap
       .addCase(fetchLatestRoadmap.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -183,14 +212,16 @@ const skillSlice = createSlice({
         state.error = action.payload;
       })
 
-      //  Delete roadmap
+      // Delete roadmap
       .addCase(deleteRoadmapById.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(deleteRoadmapById.fulfilled, (state, action) => {
         state.loading = false;
-        state.userRoadmaps = state.userRoadmaps.filter(r => r._id !== action.payload);
+        state.userRoadmaps = state.userRoadmaps.filter(
+          (r) => r._id !== action.payload
+        );
         if (state.selectedRoadmap?._id === action.payload) {
           state.selectedRoadmap = null;
         }
@@ -198,9 +229,30 @@ const skillSlice = createSlice({
       .addCase(deleteRoadmapById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // ✅ Update step status
+      .addCase(updateStepStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateStepStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedRoadmap = action.payload;
+        // Sidebar progress update
+        state.userRoadmaps = state.userRoadmaps.map((r) =>
+          r._id === action.payload._id
+            ? { ...r, progress: action.payload.progress }
+            : r
+        );
+      })
+      .addCase(updateStepStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { setTargetRole, setCurrentSkills, resetSkillState } = skillSlice.actions;
+export const { setTargetRole, setCurrentSkills, resetSkillState } =
+  skillSlice.actions;
 export default skillSlice.reducer;

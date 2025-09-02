@@ -5,6 +5,7 @@ import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import AboutSection from "./AboutSection";
+
 const Login = () => {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
@@ -21,14 +22,9 @@ const Login = () => {
     try {
       const res = await axios.post(
         BASE_URL + "/api/auth/login",
-        {
-          //axios is a npm package used for api call . we can use fetch also but axios is easy
-          emailId,
-          password,
-        },
+        { emailId, password },
         { withCredentials: true }
       );
-      //dispatch(addUser(res.data));
       dispatch(addUser(res.data.user));
       navigate("/");
     } catch (error) {
@@ -54,12 +50,12 @@ const Login = () => {
   return (
     <>
       <div className="flex justify-center my-10">
-        <div className="card bg-base-300 w-96 shadow-sm">
+        <div className="card bg-green-100 w-96 shadow-sm">
           <div className="card-body">
-            <h2 className="card-title justify-center text-green-400 font-bold text-2xl">
+            <h2 className="card-title justify-center text-black font-bold text-2xl">
               {isLoginForm ? "Login" : "SignUp"}
             </h2>
-            <div>
+            <div className="text-black font-bold">
               {!isLoginForm && (
                 <>
                   <div className="my-5">
@@ -70,7 +66,7 @@ const Login = () => {
                       <input
                         type="text"
                         value={firstName}
-                        className="input input-bordered w-full max-w-xs"
+                        className="input input-bordered w-full max-w-xs text-white"
                         onChange={(e) => setFirstName(e.target.value)}
                       />
                     </label>
@@ -84,7 +80,7 @@ const Login = () => {
                       <input
                         type="text"
                         value={lastName}
-                        className="input input-bordered w-full max-w-xs"
+                        className="input input-bordered w-full max-w-xs text-white"
                         onChange={(e) => setLastName(e.target.value)}
                       />
                     </label>
@@ -100,7 +96,7 @@ const Login = () => {
                   <input
                     type="text"
                     value={emailId}
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-full max-w-xs text-white"
                     onChange={(e) => setEmailId(e.target.value)}
                   />
                 </label>
@@ -116,7 +112,7 @@ const Login = () => {
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="input input-bordered w-full pr-14 focus:outline-none"
+                      className="input input-bordered w-full pr-14 focus:outline-none text-white"
                     />
 
                     <button
@@ -140,7 +136,7 @@ const Login = () => {
               </button>
             </div>
             <p
-              className=" pt-2 text-center cursor-pointer"
+              className=" pt-2 text-center cursor-pointer text-black"
               onClick={() => setIsLoginForm((value) => !value)}
             >
               {isLoginForm

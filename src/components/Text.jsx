@@ -13,7 +13,7 @@ const Text = () => {
 
   return (
     <div>
-    <div className="flex items-center justify-center  font-sans relative overflow-hidden">
+    <div className="flex items-center justify-center  font-sans relative overflow-hidden ">
       <h1
         className="mt-7 text-4xl sm:text-5xl md:text-5xl lg:text-5xl font-semibold whitespace-nowrap text-transparent bg-clip-text"
         style={{

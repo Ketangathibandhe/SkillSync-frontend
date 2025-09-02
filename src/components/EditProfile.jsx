@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 const EditProfile = () => {
   const user = useSelector((state) => state.user);
-
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
   const [age, setAge] = useState(user?.age || "");
@@ -16,133 +17,139 @@ const EditProfile = () => {
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
   const dispatch = useDispatch();
+
   const saveProfile = async () => {
     try {
       const res = await axios.put(
         BASE_URL + "/api/profile/profile/edit",
         { firstName, lastName, photoUrl, age, gender, about },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
-
       dispatch(addUser(res?.data?.data));
+      navigate("/");
       setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      setTimeout(() => setShowToast(false), 3000);
     } catch (error) {
-      setError(error.response.data);
+      setError(error?.response?.data || "Something went wrong");
     }
   };
+
   return (
-    <div className="mb-16">
-      <div className="flex justify-center gap-10">
-        <div className="flex justify-center my-5 ">
-          <div className="card bg-base-300 w-96 shadow-sm">
-            <div className="card-body">
-              <h2 className="card-title justify-center text-green-400 text-2xl">
-                Edit Profile
-              </h2>
-              <div>
-                <div className="my-4">
-                  <label className="form-control w-full max-w-xs py-4">
-                    <div className="label">
-                      <span className="label-text px-1">First Name</span>
-                    </div>
-                    <input
-                      type="text"
-                      className="input input-bordered w-full max-w-xs"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                    />
-                  </label>
-                </div>
+    <div className="w-full flex justify-center items-center px-4 mt-8 mb-20">
+      <div className="card bg-green-100 w-full max-w-sm shadow-sm">
+        <div className="card-body">
+          <h2 className="card-title justify-center text-black font-bold text-2xl">
+            Edit Profile
+          </h2>
 
-                <div className="my-4">
-                  <label className=" form-control w-full max-w-xs ">
-                    <div className="label ">
-                      <span className="label-text px-1"> Last Name</span>
-                    </div>
-                    <input
-                      type="text"
-                      className="input input-bordered w-full max-w-xs"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
-                  </label>
+          <div className="text-black font-bold">
+            {/* First Name */}
+            <div className="my-5">
+              <label className="form-control w-full py-4">
+                <div className="label">
+                  <span className="label-text px-1">First Name</span>
                 </div>
+                <input
+                  type="text"
+                  value={firstName}
+                  className="input input-bordered w-full text-white"
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </label>
+            </div>
 
-                <div className="my-4">
-                  <label className=" form-control w-full max-w-xs ">
-                    <div className="label ">
-                      <span className="label-text px-1">Photo URL</span>
-                    </div>
-                    <input
-                      type="text"
-                      className="input input-bordered w-full max-w-xs"
-                      value={photoUrl}
-                      onChange={(e) => setPhotoUrl(e.target.value)}
-                    />
-                  </label>
+            {/* Last Name */}
+            <div className="my-5">
+              <label className="form-control w-full py-4">
+                <div className="label">
+                  <span className="label-text px-1">Last Name</span>
                 </div>
+                <input
+                  type="text"
+                  value={lastName}
+                  className="input input-bordered w-full text-white"
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </label>
+            </div>
 
-                <div className="my-4">
-                  <label className=" form-control w-full max-w-xs ">
-                    <div className="label ">
-                      <span className="label-text px-1"> Age </span>
-                    </div>
-                    <input
-                      type="text"
-                      className="input input-bordered w-full max-w-xs"
-                      value={age}
-                      onChange={(e) => setAge(e.target.value)}
-                    />
-                  </label>
+            {/* Photo URL */}
+            <div className="my-5">
+              <label className="form-control w-full py-4">
+                <div className="label">
+                  <span className="label-text px-1">Photo URL</span>
                 </div>
+                <input
+                  type="text"
+                  value={photoUrl}
+                  className="input input-bordered w-full text-white"
+                  onChange={(e) => setPhotoUrl(e.target.value)}
+                />
+              </label>
+            </div>
 
-                <div className="my-4">
-                  <label className=" form-control w-full max-w-xs ">
-                    <div className="label ">
-                      <span className="label-text px-1">Gender</span>
-                    </div>
-                    <input
-                      type="text"
-                      className="input input-bordered w-full max-w-xs"
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                    />
-                  </label>
+            {/* Age */}
+            <div className="my-5">
+              <label className="form-control w-full py-4">
+                <div className="label">
+                  <span className="label-text px-1">Age</span>
                 </div>
+                <input
+                  type="text"
+                  value={age}
+                  className="input input-bordered w-full text-white"
+                  onChange={(e) => setAge(e.target.value)}
+                />
+              </label>
+            </div>
 
-                <div className="my-4">
-                  <label className=" form-control w-full max-w-xs ">
-                    <div className="label ">
-                      <span className="label-text px-1"> About</span>
-                    </div>
-                    <input
-                      type="text"
-                      className="input input-bordered w-full max-w-xs"
-                      value={about}
-                      onChange={(e) => setAbout(e.target.value)}
-                    />
-                  </label>
+            {/* Gender */}
+            <div className="my-5">
+              <label className="form-control w-full py-4">
+                <div className="label">
+                  <span className="label-text px-1">Gender</span>
                 </div>
-              </div>
-              <p>{error}</p>
-              <div className="card-actions justify-center">
-                <button
-                  onClick={saveProfile}
-                  className="btn text-black bg-green-400"
-                >
-                  Save Profile
-                </button>
-              </div>
+                <input
+                  type="text"
+                  value={gender}
+                  className="input input-bordered w-full text-white"
+                  onChange={(e) => setGender(e.target.value)}
+                />
+              </label>
+            </div>
+
+            {/* About */}
+            <div className="my-5">
+              <label className="form-control w-full py-4">
+                <div className="label">
+                  <span className="label-text px-1">About</span>
+                </div>
+                <input
+                  type="text"
+                  value={about}
+                  className="input input-bordered w-full text-white"
+                  onChange={(e) => setAbout(e.target.value)}
+                />
+              </label>
             </div>
           </div>
-        </div>
 
+          {/* Error */}
+          <p className="text-red-400">{error}</p>
+
+          {/* Save Button */}
+          <div className="card-actions justify-center">
+            <button
+              onClick={saveProfile}
+              className="btn bg-green-400 text-black px-4 py-2 font-bold rounded-xl"
+            >
+              Save Profile
+            </button>
+          </div>
+        </div>
       </div>
+
+      {/* Toast */}
       {showToast && (
         <div className="toast toast-top toast-center">
           <div className="alert alert-success">

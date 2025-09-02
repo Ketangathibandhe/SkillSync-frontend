@@ -120,22 +120,7 @@ const handleRoadmap = async () => {
         </div>
       )}
 
-      {roadmap && (
-        <div className="bg-gray-100 p-3 rounded max-h-[400px] overflow-auto text-sm">
-          <h3 className="font-semibold mb-2">Roadmap:</h3>
-          {roadmap.steps.map((step, i) => (
-            <div key={i} className="mb-4 p-3 border rounded">
-              <h4 className="font-bold text-sm">{step.title}</h4>
-              <p className="text-xs mb-1">Duration: {step.duration}</p>
-              <ul className="list-disc ml-5 text-sm">
-                {step.topics.map((t, j) => (
-                  <li key={j}>{t}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
+
     </div>
   );
 };
