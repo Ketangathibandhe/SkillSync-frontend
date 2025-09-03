@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "./constants";
 
-// ================== Async thunks ==================
+// Async thunks 
 
 // Analyze skill gap
 export const analyzeSkillGap = createAsyncThunk(
@@ -98,7 +98,7 @@ export const deleteRoadmapById = createAsyncThunk(
   }
 );
 
-// ✅ Update step status & recalc progress
+// Update step status & recalc progress
 export const updateStepStatus = createAsyncThunk(
   "skill/updateStepStatus",
   async ({ roadmapId, stepIndex, status }, { rejectWithValue }) => {
@@ -115,7 +115,7 @@ export const updateStepStatus = createAsyncThunk(
   }
 );
 
-// ================== Initial State ==================
+// Initial State 
 const initialState = {
   targetRole: "",
   currentSkills: [],
@@ -127,7 +127,7 @@ const initialState = {
   error: null,
 };
 
-// ================== Slice ==================
+// Slice 
 const skillSlice = createSlice({
   name: "skill",
   initialState,
@@ -231,7 +231,7 @@ const skillSlice = createSlice({
         state.error = action.payload;
       })
 
-      // ✅ Update step status
+      //  Update step status
       .addCase(updateStepStatus.pending, (state) => {
         state.loading = true;
         state.error = null;
