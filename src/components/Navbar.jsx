@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import axios from "axios";
-import light from "../images/light.PNG";
+import light from "../images/light.png";
 import { removeUser } from "../utils/userSlice";
 import { resetSkillState } from "../utils/skillSlice";
 
