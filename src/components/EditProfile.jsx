@@ -35,16 +35,18 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center px-4 mt-8 mb-20">
-      <div className="card bg-green-100 w-full max-w-sm shadow-sm">
+    <div className="w-full flex justify-center items-center my-10 px-4 mb-24">
+      <div className="card bg-green-100 shadow-sm 
+                      w-full max-w-[95%] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] 
+                      mx-auto">
         <div className="card-body">
           <h2 className="card-title justify-center text-black font-bold text-2xl">
             Edit Profile
           </h2>
 
-          <div className="text-black font-bold">
+          <div className="text-black font-bold w-full">
             {/* First Name */}
-            <div className="my-5">
+            <div className="my-5 w-full">
               <label className="form-control w-full py-4">
                 <div className="label">
                   <span className="label-text px-1">First Name</span>
@@ -52,14 +54,14 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={firstName}
-                  className="input input-bordered w-full text-white"
+                  className="input input-bordered w-full bg-gray-200 text-black"
                   onChange={(e) => setFirstName(e.target.value)}
                 />
               </label>
             </div>
 
             {/* Last Name */}
-            <div className="my-5">
+            <div className="my-5 w-full">
               <label className="form-control w-full py-4">
                 <div className="label">
                   <span className="label-text px-1">Last Name</span>
@@ -67,14 +69,14 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={lastName}
-                  className="input input-bordered w-full text-white"
+                  className="input input-bordered w-full bg-gray-200 text-black"
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </label>
             </div>
 
             {/* Photo URL */}
-            <div className="my-5">
+            <div className="my-5 w-full">
               <label className="form-control w-full py-4">
                 <div className="label">
                   <span className="label-text px-1">Photo URL</span>
@@ -82,14 +84,14 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={photoUrl}
-                  className="input input-bordered w-full text-white"
+                  className="input input-bordered w-full bg-gray-200 text-black"
                   onChange={(e) => setPhotoUrl(e.target.value)}
                 />
               </label>
             </div>
 
             {/* Age */}
-            <div className="my-5">
+            <div className="my-5 w-full">
               <label className="form-control w-full py-4">
                 <div className="label">
                   <span className="label-text px-1">Age</span>
@@ -97,14 +99,14 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={age}
-                  className="input input-bordered w-full text-white"
+                  className="input input-bordered w-full bg-gray-200 text-black"
                   onChange={(e) => setAge(e.target.value)}
                 />
               </label>
             </div>
 
             {/* Gender */}
-            <div className="my-5">
+            <div className="my-5 w-full">
               <label className="form-control w-full py-4">
                 <div className="label">
                   <span className="label-text px-1">Gender</span>
@@ -112,14 +114,14 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={gender}
-                  className="input input-bordered w-full text-white"
+                  className="input input-bordered w-full bg-gray-200 text-black"
                   onChange={(e) => setGender(e.target.value)}
                 />
               </label>
             </div>
 
             {/* About */}
-            <div className="my-5">
+            <div className="my-5 w-full">
               <label className="form-control w-full py-4">
                 <div className="label">
                   <span className="label-text px-1">About</span>
@@ -127,7 +129,7 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={about}
-                  className="input input-bordered w-full text-white"
+                  className="input input-bordered w-full bg-gray-200 text-black"
                   onChange={(e) => setAbout(e.target.value)}
                 />
               </label>

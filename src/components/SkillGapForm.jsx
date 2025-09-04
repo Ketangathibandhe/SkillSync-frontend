@@ -30,7 +30,9 @@ const SkillGapForm = () => {
 
   const validateFields = () => {
     if (!targetRole.trim() && currentSkills.length === 0) {
-      setValidationError("Please enter a target role and add at least one skill.");
+      setValidationError(
+        "Please enter a target role and add at least one skill."
+      );
       return false;
     }
     if (!targetRole.trim()) {
@@ -59,7 +61,12 @@ const SkillGapForm = () => {
   };
 
   return (
-    <div className="mb-20 mt-4 w-full max-w-full lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 bg-green-100 rounded-xl shadow-lg text-black">
+    <div
+      className="mb-20 mt-4 w-full max-w-[95%] sm:max-w-full 
+                 lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl 
+                 mx-auto p-4 sm:p-6 lg:p-8 
+                 bg-green-100 rounded-xl shadow-lg text-black"
+    >
       <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-5 text-center">
         Skill Gap Analysis
       </h2>
@@ -70,7 +77,7 @@ const SkillGapForm = () => {
         placeholder="Enter target role (e.g., Full Stack Developer)"
         value={targetRole}
         onChange={(e) => dispatch(setTargetRole(e.target.value))}
-        className="border p-2 sm:p-2.5 w-full rounded mb-3 text-sm"
+        className="border p-2 sm:p-2.5 w-full rounded mb-3 text-sm bg-gray-200 text-black"
       />
 
       {/* Skill Input */}
@@ -80,7 +87,7 @@ const SkillGapForm = () => {
           placeholder="Add Current skills (e.g., React ,Nodejs)"
           value={skillInput}
           onChange={(e) => setSkillInput(e.target.value)}
-          className="border p-2 flex-grow rounded text-sm"
+          className="border p-2 flex-grow rounded text-sm bg-gray-200 text-black"
         />
         <button
           onClick={handleSkillAdd}

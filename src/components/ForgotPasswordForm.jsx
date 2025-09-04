@@ -26,15 +26,17 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center px-4 my-10">
-      <div className="card bg-green-100 w-full max-w-sm shadow-sm">
+    <div className="w-full flex justify-center items-center my-10 px-4">
+      <div className="card bg-green-100 shadow-sm 
+                      w-full max-w-[95%] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] 
+                      mx-auto">
         <div className="card-body">
           <h2 className="card-title justify-center text-black font-bold text-2xl">
             Reset Password
           </h2>
 
           {/* Email */}
-          <div className="my-5">
+          <div className="my-5 w-full">
             <label className="form-control w-full py-4">
               <div className="label">
                 <span className="label-text text-black px-1">Email ID</span>
@@ -42,7 +44,7 @@ const ForgotPasswordForm = () => {
               <input
                 type="email"
                 value={emailId}
-                className="input input-bordered w-full text-white"
+                className="input input-bordered w-full bg-gray-200 text-black"
                 onChange={(e) => setEmailId(e.target.value)}
                 required
               />
@@ -50,7 +52,7 @@ const ForgotPasswordForm = () => {
           </div>
 
           {/* New Password */}
-          <div className="my-5">
+          <div className="my-5 w-full">
             <label className="form-control w-full">
               <div className="label">
                 <span className="label-text text-black px-1">New Password</span>
@@ -60,7 +62,7 @@ const ForgotPasswordForm = () => {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="input input-bordered w-full pr-14 focus:outline-none text-white"
+                  className="input input-bordered w-full pr-14 focus:outline-none bg-gray-200 text-black"
                   required
                 />
                 <button
