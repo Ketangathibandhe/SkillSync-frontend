@@ -18,31 +18,35 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //  Ensure all axios requests include credentials
+  axios.defaults.withCredentials = true;
+
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        BASE_URL + "/api/auth/login",
+        `${BASE_URL}/api/auth/login`,
         { emailId, password },
-        { withCredentials: true }
+        { withCredentials: true } // important
       );
       dispatch(addUser(res.data.user));
       navigate("/");
-    } catch (error) {
-      setError(error?.request?.response || "Something went wrong");
-      console.error(error);
+    } catch (err) {
+      console.error("Login Error:", err);
+      setError(err?.response?.data || "Something went wrong");
     }
   };
 
   const handleSignUp = async () => {
     try {
       const res = await axios.post(
-        BASE_URL + "/api/auth/signup",
+        `${BASE_URL}/api/auth/signup`,
         { firstName, lastName, emailId, password },
-        { withCredentials: true }
+        { withCredentials: true } // important
       );
       dispatch(addUser(res.data.data));
-      return navigate("/profile");
+      navigate("/profile");
     } catch (err) {
+      console.error("Signup Error:", err);
       setError(err?.response?.data || "Something went wrong");
     }
   };
@@ -61,6 +65,7 @@ const Login = () => {
             <div className="text-black font-bold w-full">
               {!isLoginForm && (
                 <>
+                  {/* First Name */}
                   <div className="my-5 w-full">
                     <label className="form-control w-full py-4">
                       <div className="label">
@@ -75,6 +80,7 @@ const Login = () => {
                     </label>
                   </div>
 
+                  {/* Last Name */}
                   <div className="my-5 w-full">
                     <label className="form-control w-full py-4">
                       <div className="label">
@@ -91,13 +97,14 @@ const Login = () => {
                 </>
               )}
 
+              {/* Email */}
               <div className="my-5 w-full">
                 <label className="form-control w-full py-4">
                   <div className="label">
                     <span className="label-text px-1"> Email ID</span>
                   </div>
                   <input
-                    type="text"
+                    type="email"
                     value={emailId}
                     className="input input-bordered w-full bg-gray-200 text-black"
                     onChange={(e) => setEmailId(e.target.value)}
@@ -105,6 +112,7 @@ const Login = () => {
                 </label>
               </div>
 
+              {/* Password + Show/Hide */}
               <div className="my-5 w-full">
                 <label className="form-control w-full">
                   <div className="label">
@@ -128,7 +136,11 @@ const Login = () => {
                 </label>
               </div>
             </div>
-            <p className="text-red-400">{error}</p>
+
+            {/* Error Message */}
+            {error && <p className="text-red-400 text-center">{error}</p>}
+
+            {/* Submit Button */}
             <div className="card-actions justify-center">
               <button
                 className="btn bg-green-400 text-black px-4 py-2 font-bold rounded-xl"
@@ -137,6 +149,8 @@ const Login = () => {
                 {isLoginForm ? "Login" : "SignUp"}
               </button>
             </div>
+
+            {/* Toggle Form */}
             <p
               className="pt-2 text-center cursor-pointer text-black"
               onClick={() => setIsLoginForm((value) => !value)}
@@ -148,6 +162,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+
       <AboutSection />
     </>
   );
