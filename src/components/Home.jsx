@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
-import Text from './Text';
 const Home = () => {
 
 
