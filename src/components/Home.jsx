@@ -44,7 +44,7 @@ const Home = () => {
     );
   }
 
-  return <Outlet />; // Navbar/Footer Layout me hai
+  return <Outlet />;
 };
 
 export default Home;
