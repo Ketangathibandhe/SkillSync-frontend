@@ -67,7 +67,7 @@ function NavBar() {
             </Link>
           </li>
                <li>
-            <Link to="/" className="justify-between">
+            <Link to="/skillGapForm" className="justify-between">
               SkillGap Analysis
             </Link>
           </li>
