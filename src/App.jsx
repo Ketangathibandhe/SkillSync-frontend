@@ -44,7 +44,6 @@ import SkillGapForm from "./components/SkillGapForm";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Home from "./components/Home";
 
 // Layout with Navbar + Footer
 const Layout = () => {
@@ -72,7 +71,7 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Layout />}>
-            {/* Public Routes with inline check */}
+            {/* Public Routes */}
             <Route
               path="login"
               element={
@@ -84,18 +83,19 @@ function App() {
             <Route
               path="forgotpassword"
               element={
-                <ProtectedRoute>
+                <PublicPage>
                   <ForgotPasswordForm />
-                </ProtectedRoute>
+                </PublicPage>
               }
             />
 
             {/* Protected Routes */}
+            {/* Default route `/` will show SkillGapForm */}
             <Route
               index
               element={
                 <ProtectedRoute>
-                  <Home />
+                  <SkillGapForm />
                 </ProtectedRoute>
               }
             />
