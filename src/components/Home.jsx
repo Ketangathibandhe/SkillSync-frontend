@@ -1,46 +1,58 @@
-import React from 'react'
-import Navbar from './Navbar'
-import { Outlet } from 'react-router-dom'
-import Footer from './Footer'
+import React, { useEffect, useState } from 'react';
+import Navbar from './Navbar';
+import { Outlet, useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
+
 const Home = () => {
-
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userData = useSelector(store => store.user)
-  const featchUser = async () => {
+  const userData = useSelector(store => store.user);
+  const [loading, setLoading] = useState(true);
+
+  const fetchUser = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/api/profile/profile/view", {
+      const res = await axios.get(`${BASE_URL}/api/profile/profile/view`, {
         withCredentials: true,
       });
       dispatch(addUser(res.data));
+      setLoading(false);
     } catch (err) {
-      if(err.status === 401){
-        navigate("/login");
+      if (err?.response?.status === 401) {
+        navigate("/login", { replace: true });
+      } else {
+        console.error("Error fetching user data:", err);
       }
-      console.error("Error fetching user data:", err);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if(!userData){
-     featchUser();
-     }
+    if (!userData) {
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
-  return (
-   <>
-   <Navbar/>
-   <Outlet/>
-   <Footer/>
-   </>
-  )
-}
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center text-lg">
+        Loading...
+      </div>
+    );
+  }
 
-export default Home
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </>
+  );
+};
+
+export default Home;
