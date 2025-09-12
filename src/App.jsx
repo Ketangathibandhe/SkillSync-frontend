@@ -1,3 +1,35 @@
+// import { useState } from "react";
+// import "./App.css";
+// import { BrowserRouter, Route, Routes } from "react-router-dom";
+// import Home from "./components/Home";
+// import appStore from "./utils/appStore";
+// import { Provider } from "react-redux";
+// import Login from "./components/Login";
+// import EditProfile from "./components/EditProfile";
+// import ForgotPasswordForm from "./components/ForgotPasswordForm";
+// import Text from "./components/Text";
+// import RoadmapPage from "./components/RoadmapPage";
+// function App() {
+//   return (
+//     <Provider store={appStore}>
+//       <BrowserRouter basename="/">
+//         <Routes>
+//           <Route path="/" element={<Home/>}>
+//             <Route path="/" element={<Text/>} />
+//             <Route path="/login" element={<Login />} />
+//             <Route path="/profile" element={<EditProfile/>} />
+//             <Route path="/forgotpassword" element={<ForgotPasswordForm/>} />
+//              <Route path="/roadmap" element={<RoadmapPage />} />
+
+//           </Route>
+//         </Routes>
+//       </BrowserRouter>
+//     </Provider>
+//   );
+// }
+
+// export default App;
+
 import "./App.css";
 import { BrowserRouter, Route, Routes, Outlet, Navigate } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
@@ -25,34 +57,36 @@ const Layout = () => {
   );
 };
 
-function App() {
-  // Redux state access directly in App.jsx
+// Inline PublicRoute logic
+const PublicPage = ({ children }) => {
   const user = useSelector((state) => state.user);
+  if (user && user.emailId) {
+    return <Navigate to="/skillGapForm" replace />;
+  }
+  return children;
+};
 
+function App() {
   return (
     <Provider store={appStore}>
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Layout />}>
-            {/* Public Routes with inline redirect if already logged in */}
+            {/* Public Routes with inline check */}
             <Route
               path="login"
               element={
-                user && user.emailId ? (
-                  <Navigate to="/skillGapForm" replace />
-                ) : (
+                <PublicPage>
                   <Login />
-                )
+                </PublicPage>
               }
             />
             <Route
               path="forgotpassword"
               element={
-                user && user.emailId ? (
-                  <Navigate to="/skillGapForm" replace />
-                ) : (
+                <PublicPage>
                   <ForgotPasswordForm />
-                )
+                </PublicPage>
               }
             />
 
