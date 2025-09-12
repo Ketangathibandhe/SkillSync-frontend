@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Text from "./Text";
 import {
   setTargetRole,
   setCurrentSkills,
@@ -67,6 +68,7 @@ const SkillGapForm = () => {
                  mx-auto p-4 sm:p-6 lg:p-8 
                  bg-green-100 rounded-xl shadow-lg text-black"
     >
+          <Text/>
       <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-5 text-center">
         Skill Gap Analysis
       </h2>
