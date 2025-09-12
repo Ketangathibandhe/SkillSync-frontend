@@ -18,7 +18,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //  Ensure all axios requests include credentials
   axios.defaults.withCredentials = true;
 
   const handleLogin = async () => {
@@ -26,10 +25,10 @@ const Login = () => {
       const res = await axios.post(
         `${BASE_URL}/api/auth/login`,
         { emailId, password },
-        { withCredentials: true } // important
+        { withCredentials: true }
       );
       dispatch(addUser(res.data.user));
-      navigate("/skillGapForm");
+      navigate("/skillGapForm", { replace: true });
     } catch (err) {
       console.error("Login Error:", err);
       setError(err?.response?.data || "Something went wrong");
@@ -41,10 +40,10 @@ const Login = () => {
       const res = await axios.post(
         `${BASE_URL}/api/auth/signup`,
         { firstName, lastName, emailId, password },
-        { withCredentials: true } // important
+        { withCredentials: true }
       );
       dispatch(addUser(res.data.data));
-      navigate("/profile");
+      navigate("/profile", { replace: true });
     } catch (err) {
       console.error("Signup Error:", err);
       setError(err?.response?.data || "Something went wrong");
@@ -53,11 +52,8 @@ const Login = () => {
 
   return (
     <>
-      {/* Outer wrapper full width + center */}
       <div className="w-full flex justify-center items-center my-10">
-        <div className="card bg-green-100 shadow-sm 
-                        w-full max-w-[95%] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] 
-                        mx-auto">
+        <div className="card bg-green-100 shadow-sm w-full max-w-[95%] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] mx-auto">
           <div className="card-body">
             <h2 className="card-title justify-center text-black font-bold text-2xl">
               {isLoginForm ? "Login" : "SignUp"}
@@ -65,7 +61,6 @@ const Login = () => {
             <div className="text-black font-bold w-full">
               {!isLoginForm && (
                 <>
-                  {/* First Name */}
                   <div className="my-5 w-full">
                     <label className="form-control w-full py-4">
                       <div className="label">
@@ -80,7 +75,6 @@ const Login = () => {
                     </label>
                   </div>
 
-                  {/* Last Name */}
                   <div className="my-5 w-full">
                     <label className="form-control w-full py-4">
                       <div className="label">
@@ -97,7 +91,6 @@ const Login = () => {
                 </>
               )}
 
-              {/* Email */}
               <div className="my-5 w-full">
                 <label className="form-control w-full py-4">
                   <div className="label">
@@ -112,7 +105,6 @@ const Login = () => {
                 </label>
               </div>
 
-              {/* Password + Show/Hide */}
               <div className="my-5 w-full">
                 <label className="form-control w-full">
                   <div className="label">
@@ -137,10 +129,8 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Error Message */}
             {error && <p className="text-red-400 text-center">{error}</p>}
 
-            {/* Submit Button */}
             <div className="card-actions justify-center">
               <button
                 className="btn bg-green-400 text-black px-4 py-2 font-bold rounded-xl"
@@ -150,14 +140,11 @@ const Login = () => {
               </button>
             </div>
 
-            {/* Toggle Form */}
             <p
               className="pt-2 text-center cursor-pointer text-black"
               onClick={() => setIsLoginForm((value) => !value)}
             >
-              {isLoginForm
-                ? "New User? SignUp Here"
-                : "Existing User? Login Here"}
+              {isLoginForm ? "New User? SignUp Here" : "Existing User? Login Here"}
             </p>
           </div>
         </div>

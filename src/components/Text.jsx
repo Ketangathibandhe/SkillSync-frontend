@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import SkillGapForm from "./SkillGapForm";
+import { useSelector } from "react-redux";
+
 const Text = () => {
   const [text, setText] = useState("Hello");
   const userData = useSelector((store) => store.user);
 
   useEffect(() => {
-    if (userData?.firstName) {
-      setText("Hello " + userData.firstName);
-    }
+    if (userData?.firstName) setText("Hello " + userData.firstName);
   }, [userData?.firstName]);
 
   return (
-    <div>
-    <div className="flex items-center justify-center  font-sans relative overflow-hidden ">
+    <div className="flex items-center justify-center font-sans relative overflow-hidden mt-6 mb-4">
       <h1
-        className="mt-7 text-4xl sm:text-5xl md:text-5xl lg:text-5xl font-semibold whitespace-nowrap text-transparent bg-clip-text"
+        className="text-4xl sm:text-5xl font-semibold whitespace-nowrap text-transparent bg-clip-text"
         style={{
           backgroundImage:
             "linear-gradient(270deg, #ff6a00, #ee0979, #00c3ff, #ff6a00)",
@@ -34,9 +31,6 @@ const Text = () => {
           }
         `}
       </style>
-      
-    </div>
-    <SkillGapForm/>
     </div>
   );
 };
