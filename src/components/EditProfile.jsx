@@ -25,16 +25,14 @@ const EditProfile = () => {
         { firstName, lastName, photoUrl, age, gender, about },
         { withCredentials: true }
       );
-
-      // Redux me updated user set karo
       dispatch(addUser(res?.data?.data));
 
-      // ✅ Profile save hone ke baad direct SkillGapForm pe le jao
-      navigate("/skillGapForm", { replace: true });
-
-      // Toast show karo (optional)
+      // Show toast (optional)
       setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
+      setTimeout(() => setShowToast(false), 2000);
+
+      // Redirect to SkillGapForm after save
+      navigate("/skillGapForm", { replace: true });
     } catch (error) {
       setError(error?.response?.data || "Something went wrong");
     }

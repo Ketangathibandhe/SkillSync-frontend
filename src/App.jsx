@@ -42,10 +42,12 @@ const PublicPage = ({ children }) => {
 // Load auth state once for the whole app (refresh-safe)
 const AuthLoader = ({ children }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
+
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/profile/profile/view`, {
@@ -58,11 +60,18 @@ const AuthLoader = ({ children }) => {
         if (mounted) setLoading(false);
       }
     };
-    fetchUser();
+
+    // If user already set (e.g., just signed up or logged in), skip fetch to avoid race
+    if (!user || !user.emailId) {
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
+
     return () => {
       mounted = false;
     };
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   if (loading) {
     return (
@@ -91,12 +100,8 @@ function App() {
                   </PublicPage>
                 }
               />
-              <Route
-                path="forgotpassword"
-                element={
-                  <ForgotPasswordForm />
-                }
-              />
+              {/* Forgot password public for both logged-in and logged-out */}
+              <Route path="forgotpassword" element={<ForgotPasswordForm />} />
 
               {/* Protected routes */}
               <Route

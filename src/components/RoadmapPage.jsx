@@ -20,6 +20,7 @@ const RoadmapPage = () => {
   }, [dispatch]);
 
   const handleStatusChange = (stepIndex, checked) => {
+    if (!selectedRoadmap) return;
     dispatch(
       updateStepStatus({
         roadmapId: selectedRoadmap._id,
@@ -42,9 +43,11 @@ const RoadmapPage = () => {
         style={{ maxHeight: "100vh" }}
       >
         <h3 className="font-bold mb-4 text-black">My Roadmaps</h3>
+
         {userRoadmaps.length === 0 && (
           <p className="text-sm text-gray-500">No roadmaps yet</p>
         )}
+
         {userRoadmaps.map((r) => (
           <div key={r._id} className="flex items-center mb-2">
             <button
@@ -72,10 +75,21 @@ const RoadmapPage = () => {
       <div className="flex-1 p-4 md:p-6 overflow-y-auto">
         {loading && <p className="text-center">Loading roadmap...</p>}
         {error && <p className="text-red-500">{error}</p>}
-        {!loading && !selectedRoadmap && (
+
+        {/* Empty state: no roadmaps at all */}
+        {!loading && userRoadmaps.length === 0 && (
+          <div className="flex flex-col items-center justify-center h-full text-gray-600">
+            <p className="text-lg font-semibold">No roadmap generated yet</p>
+            <p className="text-sm">Go to Skill Gap Analysis to create your first roadmap</p>
+          </div>
+        )}
+
+        {/* If there are roadmaps but none is selected */}
+        {!loading && userRoadmaps.length > 0 && !selectedRoadmap && (
           <p className="text-center">No roadmap selected</p>
         )}
 
+        {/* Selected roadmap UI */}
         {selectedRoadmap && (
           <>
             {/* Progress Bar with numbers */}
@@ -109,10 +123,7 @@ const RoadmapPage = () => {
             </h2>
 
             {selectedRoadmap.steps.map((step, i) => (
-              <div
-                key={i}
-                className="mb-4 p-4 border rounded bg-green-100 text-black"
-              >
+              <div key={i} className="mb-4 p-4 border rounded bg-green-100 text-black">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{step.title}</h3>
                   <input
@@ -125,7 +136,6 @@ const RoadmapPage = () => {
 
                 <p className="text-sm mb-2">Duration: {step.duration}</p>
 
-                {/* Topics */}
                 {step.topics?.length > 0 && (
                   <div>
                     <h4 className="font-semibold text-sm">Topics:</h4>
@@ -137,7 +147,6 @@ const RoadmapPage = () => {
                   </div>
                 )}
 
-                {/* Resources */}
                 {step.resources?.length > 0 && (
                   <div className="mt-2">
                     <h4 className="font-semibold text-sm">Resources:</h4>
@@ -149,7 +158,6 @@ const RoadmapPage = () => {
                   </div>
                 )}
 
-                {/* Projects */}
                 {step.projects?.length > 0 && (
                   <div className="mt-2">
                     <h4 className="font-semibold text-sm">Projects:</h4>
