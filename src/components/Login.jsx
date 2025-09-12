@@ -35,21 +35,24 @@ const Login = () => {
     }
   };
 
-  const handleSignUp = async () => {
-    try {
-      const res = await axios.post(
-        `${BASE_URL}/api/auth/signup`,
-        { firstName, lastName, emailId, password },
-        { withCredentials: true }
-      );
-      dispatch(addUser(res.data.data));
-      //  Signup ke baad direct profile page
+const handleSignUp = async () => {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/api/auth/signup`,
+      { firstName, lastName, emailId, password },
+      { withCredentials: true }
+    );
+    dispatch(addUser(res.data.data));
+
+    setTimeout(() => {
       navigate("/profile", { replace: true });
-    } catch (err) {
-      console.error("Signup Error:", err);
-      setError(err?.response?.data || "Something went wrong");
-    }
-  };
+    }, 0); // ek render cycle ka delay taaki Redux update apply ho jaye
+  } catch (err) {
+    console.error("Signup Error:", err);
+    setError(err?.response?.data || "Something went wrong");
+  }
+};
+
 
   return (
     <>
