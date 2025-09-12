@@ -29,7 +29,7 @@ const Login = () => {
         { withCredentials: true } // important
       );
       dispatch(addUser(res.data.user));
-      navigate("/");
+      navigate("/skillGapForm");
     } catch (err) {
       console.error("Login Error:", err);
       setError(err?.response?.data || "Something went wrong");

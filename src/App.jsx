@@ -101,6 +101,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="skillGapForm"
+              element={
+                <ProtectedRoute>
+                  <SkillGapForm /> {/* tumhara form component */}
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>
