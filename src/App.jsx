@@ -1,5 +1,11 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes, Outlet, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -88,9 +94,7 @@ function App() {
               <Route
                 path="forgotpassword"
                 element={
-                  <PublicPage>
-                    <ForgotPasswordForm />
-                  </PublicPage>
+                  <ForgotPasswordForm />
                 }
               />
 
