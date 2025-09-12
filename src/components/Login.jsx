@@ -43,6 +43,7 @@ const Login = () => {
         { withCredentials: true }
       );
       dispatch(addUser(res.data.data));
+      //  Signup ke baad direct profile page
       navigate("/profile", { replace: true });
     } catch (err) {
       console.error("Signup Error:", err);
