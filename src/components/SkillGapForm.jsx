@@ -61,101 +61,122 @@ const SkillGapForm = () => {
   };
 
   return (
-    <div className="w-full">
-      {/* Always show greeting above form */}
+    <>
       <Text />
 
-      <div
-        className="mb-20 mt-2 w-full max-w-[95%] sm:max-w-full
-                   lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl
-                   mx-auto p-4 sm:p-6 lg:p-8
-                   bg-green-100 rounded-xl shadow-lg text-black"
-      >
-        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-5 text-center">
-          Skill Gap Analysis
-        </h2>
+      <div className="w-full flex justify-center items-center my-10">
+        <div className="card bg-green-100 shadow-sm w-full max-w-[95%] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] mx-auto">
+          <div className="card-body">
+            <h2 className="card-title justify-center text-black font-bold text-2xl">
+              Skill Gap Analysis
+            </h2>
 
-        {/* Target Role */}
-        <input
-          type="text"
-          placeholder="Enter target role (e.g., Full Stack Developer)"
-          value={targetRole}
-          onChange={(e) => dispatch(setTargetRole(e.target.value))}
-          className="border p-2 sm:p-2.5 w-full rounded mb-3 text-sm bg-gray-200 text-black"
-        />
+            <div className="text-black font-bold w-full">
+              {/* Target Role */}
+              <div className="my-5 w-full">
+                <label className="form-control w-full py-4">
+                  <div className="label">
+                    <span className="label-text px-1">Target Role</span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Enter target role (e.g., Full Stack Developer)"
+                    value={targetRole}
+                    onChange={(e) => dispatch(setTargetRole(e.target.value))}
+                    className="input input-bordered w-full bg-gray-200 text-black"
+                  />
+                </label>
+              </div>
 
-        {/* Skill Input */}
-        <div className="flex flex-col sm:flex-row gap-2 mb-4">
-          <input
-            type="text"
-            placeholder="Add Current skills (e.g., React, Node.js)"
-            value={skillInput}
-            onChange={(e) => setSkillInput(e.target.value)}
-            className="border p-2 flex-grow rounded text-sm bg-gray-200 text-black"
-          />
-          <button
-            onClick={handleSkillAdd}
-            className="bg-green-500 hover:bg-green-600 text-black px-3 py-1.5 rounded text-sm"
-          >
-            Add Skill
-          </button>
-        </div>
+              {/* Skill Input */}
+              <div className="my-5 w-full">
+                <label className="form-control w-full py-4">
+                  <div className="label">
+                    <span className="label-text px-1">Add Current Skills</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="e.g., React, Node.js"
+                      value={skillInput}
+                      onChange={(e) => setSkillInput(e.target.value)}
+                      className="input input-bordered flex-grow bg-gray-200 text-black"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleSkillAdd}
+                      className="btn bg-green-400 text-black font-bold rounded-xl"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </label>
+              </div>
 
-        {/* Current Skills Display */}
-        <div className="mb-4 flex flex-wrap gap-2">
-          {currentSkills.map((skill, i) => (
-            <span
-              key={i}
-              className="bg-gray-200 px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5"
-            >
-              {skill}
+              {/* Current Skills */}
+              {currentSkills.length > 0 && (
+                <div className="mb-4 flex flex-wrap gap-2">
+                  {currentSkills.map((skill, i) => (
+                    <span
+                      key={i}
+                      className="bg-gray-200 px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5"
+                    >
+                      {skill}
+                      <button
+                        type="button"
+                        onClick={() => handleSkillRemove(i)}
+                        className="text-red-500 hover:text-red-700 font-bold cursor-pointer text-xs"
+                        aria-label={`Remove ${skill}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Validation Error */}
+            {validationError && (
+              <p className="text-red-400 text-center">{validationError}</p>
+            )}
+            {error && <p className="text-red-400 text-center">{error}</p>}
+
+            {/* Action Buttons */}
+            <div className="card-actions justify-center flex-wrap gap-3 mt-4">
               <button
-                type="button"
-                onClick={() => handleSkillRemove(i)}
-                className="text-red-500 hover:text-red-700 font-bold cursor-pointer text-xs"
-                aria-label={`Remove ${skill}`}
+                className="btn bg-green-400 text-black px-4 py-2 font-bold rounded-xl"
+                onClick={handleSkillGap}
+                disabled={loading}
               >
-                ×
+                Analyze Skill Gap
               </button>
-            </span>
-          ))}
-        </div>
+              <button
+                className="btn bg-green-800 text-white px-4 py-2 font-bold rounded-xl"
+                onClick={handleRoadmap}
+                disabled={loading}
+              >
+                Generate Roadmap
+              </button>
+            </div>
 
-        {/* Validation Error */}
-        {validationError && (
-          <p className="text-red-500 text-sm mb-3">{validationError}</p>
-        )}
+            {/* Output */}
+            {loading && (
+              <p className="text-center text-sm mt-3">Processing...</p>
+            )}
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
-          <button
-            onClick={handleSkillGap}
-            disabled={loading}
-            className="bg-green-500 hover:bg-green-600 text-black px-3 py-1.5 rounded text-sm shadow-sm"
-          >
-            Analyze Skill Gap
-          </button>
-          <button
-            onClick={handleRoadmap}
-            disabled={loading}
-            className="bg-green-800 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm shadow-sm"
-          >
-            Generate Roadmap
-          </button>
-        </div>
-
-        {/* Output */}
-        {loading && <p className="text-center text-sm">Processing...</p>}
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        {gapAnalysis && (
-          <div className="bg-gray-100 p-3 rounded mb-4 max-h-[300px] overflow-auto text-sm">
-            <h3 className="font-semibold mb-1">Skill Gap:</h3>
-            <pre className="whitespace-pre-wrap break-words">{gapAnalysis}</pre>
+            {gapAnalysis && (
+              <div className="bg-gray-100 p-3 rounded mt-4 max-h-[300px] overflow-auto text-sm">
+                <h3 className="font-semibold mb-1">Skill Gap:</h3>
+                <pre className="whitespace-pre-wrap break-words">
+                  {gapAnalysis}
+                </pre>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
