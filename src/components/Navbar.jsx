@@ -29,7 +29,7 @@ function NavBar() {
   return (
     <div className="navbar bg-green-200 shadow-sm px-4 flex flex-wrap justify-between items-center ">
       <div className="flex items-center gap-2">
-        <img src={light} alt="SkillSync Logo" className="w-32 sm:w-48" />
+        <Link to='/skillGapForm'><img src={light} alt="SkillSync Logo" className="w-32 sm:w-48" /></Link>
       </div>
 
       <div className="dropdown dropdown-end">
