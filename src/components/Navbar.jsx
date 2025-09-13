@@ -19,7 +19,7 @@ function NavBar() {
         { withCredentials: true }
       );
       dispatch(removeUser());
-        dispatch(resetSkillState());
+      dispatch(resetSkillState());
       navigate("/login");
     } catch (err) {
       console.error("Logout failed", err);
@@ -27,21 +27,28 @@ function NavBar() {
   };
 
   return (
-    <div className="navbar bg-green-200 shadow-sm px-4 flex flex-wrap justify-between items-center ">
+    <div className="navbar bg-green-200 shadow-sm px-4 flex flex-wrap justify-between items-center">
+      {/* Logo */}
       <div className="flex items-center gap-2">
-        <Link to='/skillGapForm'><img src={light} alt="SkillSync Logo" className="w-32 sm:w-48" /></Link>
+        <Link to="/skillGapForm">
+          <img src={light} alt="SkillSync Logo" className="w-32 sm:w-48" />
+        </Link>
       </div>
 
-      <div className="dropdown dropdown-end">
-        <span className="font-mono text-black text-xl mr-1.5">
+      {/* Name + Profile + Arrow */}
+      <div className="dropdown dropdown-end flex items-center gap-1">
+        {/* Name */}
+        <span className="font-mono text-black text-xl">
           {user ? user.firstName : "Login"}
         </span>
+
+        {/* Profile Image with Arrow */}
         <div
           tabIndex={0}
           role="button"
-          className="btn btn-ghost btn-circle avatar"
+          className="btn btn-ghost btn-circle avatar relative"
         >
-          <div className="w-10 rounded-full">
+          <div className="w-10 h-10 rounded-full overflow-hidden">
             <img
               alt="User photo"
               src={
@@ -51,22 +58,41 @@ function NavBar() {
               }
             />
           </div>
+
+          {/* Bigger, Darker, Bolder Downward Arrow */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-green-600 absolute -bottom-3 left-1/2 -translate-x-1/2 pt-2.5"
+            style={{ marginTop: "6px" }} // extra gap between image & arrow
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={4}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
         </div>
+
+        {/* Dropdown Menu */}
         <ul
           tabIndex={0}
-          className="menu menu-sm dropdown-content bg-green-100 rounded-box mt-4 w-52 p-2 shadow text-black z-[999]"
+          className="menu menu-sm dropdown-content bg-green-100 rounded-box mt-60 w-52 p-2 shadow text-black z-[999]"
         >
           <li>
             <Link to="/profile" className="justify-between">
               Profile <span className="badge">New</span>
             </Link>
           </li>
-           <li>
+          <li>
             <Link to="/roadmap" className="justify-between">
               Saved Roadmaps
             </Link>
           </li>
-               <li>
+          <li>
             <Link to="/skillGapForm" className="justify-between">
               SkillGap Analysis
             </Link>
