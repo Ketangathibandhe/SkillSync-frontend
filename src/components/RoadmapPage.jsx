@@ -20,7 +20,7 @@ const RoadmapPage = () => {
   }, [dispatch]);
 
   const handleStatusChange = (stepIndex, checked) => {
-    if (!selectedRoadmap) return;
+    if (!selectedRoadmap?._id) return;
     dispatch(
       updateStepStatus({
         roadmapId: selectedRoadmap._id,
@@ -29,6 +29,8 @@ const RoadmapPage = () => {
       })
     );
   };
+
+  const hasSteps = selectedRoadmap?.steps && Array.isArray(selectedRoadmap.steps);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mb-14">
@@ -80,7 +82,9 @@ const RoadmapPage = () => {
         {!loading && userRoadmaps.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-gray-600">
             <p className="text-lg font-semibold">No roadmap generated yet</p>
-            <p className="text-sm">Go to Skill Gap Analysis to create your first roadmap</p>
+            <p className="text-sm">
+              Go to Skill Gap Analysis to create your first roadmap
+            </p>
           </div>
         )}
 
@@ -90,7 +94,7 @@ const RoadmapPage = () => {
         )}
 
         {/* Selected roadmap UI */}
-        {selectedRoadmap && (
+        {hasSteps && (
           <>
             {/* Progress Bar with numbers */}
             <div className="mb-6">
@@ -123,7 +127,10 @@ const RoadmapPage = () => {
             </h2>
 
             {selectedRoadmap.steps.map((step, i) => (
-              <div key={i} className="mb-4 p-4 border rounded bg-green-100 text-black">
+              <div
+                key={i}
+                className="mb-4 p-4 border rounded bg-green-100 text-black"
+              >
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{step.title}</h3>
                   <input
