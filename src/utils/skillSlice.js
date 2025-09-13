@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "./constants";
 
-// Async thunks 
-
 // Analyze skill gap
 export const analyzeSkillGap = createAsyncThunk(
   "skill/analyzeSkillGap",
@@ -38,7 +36,7 @@ export const generateRoadmap = createAsyncThunk(
   }
 );
 
-// Fetch all roadmaps for sidebar
+// Fetch all roadmaps
 export const fetchUserRoadmaps = createAsyncThunk(
   "skill/fetchUserRoadmaps",
   async (_, { rejectWithValue }) => {
@@ -53,27 +51,12 @@ export const fetchUserRoadmaps = createAsyncThunk(
   }
 );
 
-// Fetch single roadmap by ID
+// Fetch roadmap by ID
 export const fetchRoadmapById = createAsyncThunk(
   "skill/fetchRoadmapById",
   async (roadmapId, { rejectWithValue }) => {
     try {
       const res = await axios.get(`${BASE_URL}/api/ai/roadmap/${roadmapId}`, {
-        withCredentials: true,
-      });
-      return res.data.roadmap;
-    } catch (err) {
-      return rejectWithValue(err.response?.data || err.message);
-    }
-  }
-);
-
-// Fetch latest roadmap
-export const fetchLatestRoadmap = createAsyncThunk(
-  "skill/fetchLatestRoadmap",
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(`${BASE_URL}/api/ai/roadmaps/latest`, {
         withCredentials: true,
       });
       return res.data.roadmap;
@@ -98,7 +81,7 @@ export const deleteRoadmapById = createAsyncThunk(
   }
 );
 
-// Update step status & recalc progress
+// Update step status
 export const updateStepStatus = createAsyncThunk(
   "skill/updateStepStatus",
   async ({ roadmapId, stepIndex, status }, { rejectWithValue }) => {
@@ -115,7 +98,7 @@ export const updateStepStatus = createAsyncThunk(
   }
 );
 
-// Initial State 
+// Initial state
 const initialState = {
   targetRole: "",
   currentSkills: [],
@@ -127,7 +110,7 @@ const initialState = {
   error: null,
 };
 
-// Slice 
+// Slice
 const skillSlice = createSlice({
   name: "skill",
   initialState,
@@ -177,11 +160,14 @@ const skillSlice = createSlice({
       })
       .addCase(fetchUserRoadmaps.fulfilled, (state, action) => {
         state.loading = false;
-        state.userRoadmaps = action.payload;
+        state.userRoadmaps = Array.isArray(action.payload)
+          ? action.payload
+          : [];
       })
       .addCase(fetchUserRoadmaps.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.userRoadmaps = [];
       })
 
       // Fetch roadmap by ID
@@ -191,25 +177,12 @@ const skillSlice = createSlice({
       })
       .addCase(fetchRoadmapById.fulfilled, (state, action) => {
         state.loading = false;
-        state.selectedRoadmap = action.payload;
+        state.selectedRoadmap = action.payload || null;
       })
       .addCase(fetchRoadmapById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-
-      // Fetch latest roadmap
-      .addCase(fetchLatestRoadmap.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchLatestRoadmap.fulfilled, (state, action) => {
-        state.loading = false;
-        state.selectedRoadmap = action.payload;
-      })
-      .addCase(fetchLatestRoadmap.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.selectedRoadmap = null;
       })
 
       // Delete roadmap
@@ -231,17 +204,16 @@ const skillSlice = createSlice({
         state.error = action.payload;
       })
 
-      //  Update step status
+      // Update step status
       .addCase(updateStepStatus.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateStepStatus.fulfilled, (state, action) => {
         state.loading = false;
-        state.selectedRoadmap = action.payload;
-        // Sidebar progress update
+        state.selectedRoadmap = action.payload || null;
         state.userRoadmaps = state.userRoadmaps.map((r) =>
-          r._id === action.payload._id
+          r._id === action.payload?._id
             ? { ...r, progress: action.payload.progress }
             : r
         );

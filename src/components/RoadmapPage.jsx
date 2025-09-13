@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUserRoadmaps,
-  fetchLatestRoadmap,
   fetchRoadmapById,
   deleteRoadmapById,
   updateStepStatus,
@@ -14,10 +13,21 @@ const RoadmapPage = () => {
     (state) => state.skill
   );
 
+  // Load roadmaps on mount
   useEffect(() => {
     dispatch(fetchUserRoadmaps());
-    dispatch(fetchLatestRoadmap());
   }, [dispatch]);
+
+  // Auto-select first roadmap if none selected
+  useEffect(() => {
+    if (
+      Array.isArray(userRoadmaps) &&
+      userRoadmaps.length > 0 &&
+      !selectedRoadmap?._id
+    ) {
+      dispatch(fetchRoadmapById(userRoadmaps[0]._id));
+    }
+  }, [dispatch, userRoadmaps, selectedRoadmap?._id]);
 
   const handleStatusChange = (stepIndex, checked) => {
     if (!selectedRoadmap?._id) return;
@@ -30,47 +40,44 @@ const RoadmapPage = () => {
     );
   };
 
-  const hasSteps = selectedRoadmap?.steps && Array.isArray(selectedRoadmap.steps);
+  const hasSteps =
+    selectedRoadmap?.steps && Array.isArray(selectedRoadmap.steps);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mb-14">
       {/* Sidebar */}
       <div
-        className="
-          w-full md:w-64 
-          bg-green-100 p-4 border-b md:border-b-0 md:border-r 
-          md:h-screen md:sticky md:top-0 
-          overflow-y-auto
-        "
+        className="w-full md:w-64 bg-green-100 p-4 border-b md:border-b-0 md:border-r md:h-screen md:sticky md:top-0 overflow-y-auto"
         style={{ maxHeight: "100vh" }}
       >
         <h3 className="font-bold mb-4 text-black">My Roadmaps</h3>
 
-        {userRoadmaps.length === 0 && (
+        {Array.isArray(userRoadmaps) && userRoadmaps.length === 0 && (
           <p className="text-sm text-gray-500">No roadmaps yet</p>
         )}
 
-        {userRoadmaps.map((r) => (
-          <div key={r._id} className="flex items-center mb-2">
-            <button
-              onClick={() => dispatch(fetchRoadmapById(r._id))}
-              className={`flex-1 text-left p-2 rounded ${
-                selectedRoadmap?._id === r._id
-                  ? "bg-green-500 text-white shadow-md hover:bg-green-600"
-                  : "bg-gray-200 text-black shadow-md hover:bg-gray-300"
-              }`}
-            >
-              {r.targetRole}
-            </button>
-            <button
-              onClick={() => dispatch(deleteRoadmapById(r._id))}
-              className="ml-2 border rounded-full text-red-500 hover:text-red-700 font-bold px-1"
-              title="Delete Roadmap"
-            >
-              ×
-            </button>
-          </div>
-        ))}
+        {Array.isArray(userRoadmaps) &&
+          userRoadmaps.map((r) => (
+            <div key={r._id} className="flex items-center mb-2">
+              <button
+                onClick={() => dispatch(fetchRoadmapById(r._id))}
+                className={`flex-1 text-left p-2 rounded ${
+                  selectedRoadmap?._id === r._id
+                    ? "bg-green-500 text-white shadow-md hover:bg-green-600"
+                    : "bg-gray-200 text-black shadow-md hover:bg-gray-300"
+                }`}
+              >
+                {r.targetRole}
+              </button>
+              <button
+                onClick={() => dispatch(deleteRoadmapById(r._id))}
+                className="ml-2 border rounded-full text-red-500 hover:text-red-700 font-bold px-1"
+                title="Delete Roadmap"
+              >
+                ×
+              </button>
+            </div>
+          ))}
       </div>
 
       {/* Main Content */}
@@ -78,7 +85,7 @@ const RoadmapPage = () => {
         {loading && <p className="text-center">Loading roadmap...</p>}
         {error && <p className="text-red-500">{error}</p>}
 
-        {/* Empty state: no roadmaps at all */}
+        {/* Empty state */}
         {!loading && userRoadmaps.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-gray-600">
             <p className="text-lg font-semibold">No roadmap generated yet</p>
@@ -88,33 +95,36 @@ const RoadmapPage = () => {
           </div>
         )}
 
-        {/* If there are roadmaps but none is selected */}
-        {!loading && userRoadmaps.length > 0 && !selectedRoadmap && (
-          <p className="text-center">No roadmap selected</p>
-        )}
+        {/* No roadmap selected */}
+        {!loading &&
+          userRoadmaps.length > 0 &&
+          !hasSteps && (
+            <p className="text-center">No roadmap selected</p>
+          )}
 
-        {/* Selected roadmap UI */}
+        {/* Roadmap UI */}
         {hasSteps && (
           <>
-            {/* Progress Bar with numbers */}
+            {/* Progress Bar */}
             <div className="mb-6">
               {(() => {
                 const totalSteps = selectedRoadmap.steps.length;
                 const completedSteps = selectedRoadmap.steps.filter(
                   (s) => s.status === "completed"
                 ).length;
+                const progress = Number(selectedRoadmap.progress) || 0;
                 return (
                   <div className="border pt-2 pb-3.5 px-2 rounded-2xl">
                     <div className="flex items-center mb-1 text-2xl pl-4">
                       <h4 className="font-semibold">Total Progress</h4>
                       <span className="font-medium text-white pl-4 text-2xl">
-                        {completedSteps} / {totalSteps} ({selectedRoadmap.progress}%)
+                        {completedSteps} / {totalSteps} ({progress}%)
                       </span>
                     </div>
                     <div className="w-full bg-gray-300 rounded-full h-4">
                       <div
                         className="bg-green-500 h-4 rounded-full transition-all duration-300"
-                        style={{ width: `${selectedRoadmap.progress}%` }}
+                        style={{ width: `${progress}%` }}
                       ></div>
                     </div>
                   </div>
