@@ -65,7 +65,14 @@ const SkillGapForm = () => {
       <Text />
 
       <div className="w-full flex justify-center items-center my-10">
-        <div className="card bg-green-100 shadow-sm w-full max-w-[95%] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] mx-auto">
+        <div
+          className="
+            card bg-green-100 shadow-sm 
+            w-full max-w-[95%] sm:max-w-[550px] md:max-w-[700px] lg:max-w-[850px] xl:max-w-[950px] 
+            mx-auto
+            min-h-[500px] sm:min-h-[550px] md:min-h-[600px] lg:min-h-[650px]
+          "
+        >
           <div className="card-body">
             <h2 className="card-title justify-center text-black font-bold text-2xl">
               Skill Gap Analysis
@@ -94,7 +101,7 @@ const SkillGapForm = () => {
                   <div className="label">
                     <span className="label-text px-1">Add Current Skills</span>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-col sm:flex-row">
                     <input
                       type="text"
                       placeholder="e.g., React, Node.js"
