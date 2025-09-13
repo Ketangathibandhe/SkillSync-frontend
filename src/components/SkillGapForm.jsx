@@ -71,7 +71,7 @@ const SkillGapForm = () => {
             w-full max-w-[95%] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[800px] xl:max-w-[900px]
             mx-auto
             rounded-xl
-            sm:min-h-[550px] md:min-h-[550px] lg:min-h-[500px]
+            sm:min-h-[500px] md:min-h-[500px] lg:min-h-[480px]
           "
         >
           <div className="card-body">
