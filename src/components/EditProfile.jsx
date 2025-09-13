@@ -116,7 +116,8 @@ const EditProfile = () => {
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="select select-bordered w-full bg-gray-200 text-black"
+                  className="select select-bordered w-full bg-gray-200 text-black h-12 text-base 
+                             focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
