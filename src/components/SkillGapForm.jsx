@@ -113,7 +113,7 @@ const SkillGapForm = () => {
                     <button
                       type="button"
                       onClick={handleSkillAdd}
-                      className="btn bg-green-400 text-black font-bold rounded-xl"
+                      className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto"
                     >
                       Add
                     </button>
@@ -151,16 +151,16 @@ const SkillGapForm = () => {
             {error && <p className="text-red-400 text-center mt-3">{error}</p>}
 
             {/* Action Buttons */}
-            <div className="card-actions justify-center flex-wrap gap-3 mt-6">
+            <div className="card-actions justify-center gap-3 mt-6 flex-col sm:flex-row">
               <button
-                className="btn bg-green-400 text-black px-4 py-2 font-bold rounded-xl"
+                className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto"
                 onClick={handleSkillGap}
                 disabled={loading}
               >
                 Analyze Skill Gap
               </button>
               <button
-                className="btn bg-green-800 text-white px-4 py-2 font-bold rounded-xl"
+                className="btn bg-green-800 text-white font-bold rounded-xl w-full sm:w-auto"
                 onClick={handleRoadmap}
                 disabled={loading}
               >
