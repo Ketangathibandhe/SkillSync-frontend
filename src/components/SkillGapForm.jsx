@@ -64,17 +64,17 @@ const SkillGapForm = () => {
     <>
       <Text />
 
-      <div className="w-full flex justify-center items-center my-10 px-3">
+      <div className="w-full flex justify-center items-center my-6 px-3">
         <div
           className="
             card bg-green-100 shadow-sm 
             w-full max-w-[95%] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[800px] xl:max-w-[900px]
             mx-auto
-            min-h-[600px] sm:min-h-[620px] md:min-h-[auto]
             rounded-xl
+            lg:min-h-[500px]
           "
         >
-          <div className="card-body">
+          <div className="card-body py-6">
             <h2 className="card-title justify-center text-black font-bold text-2xl mb-4">
               Skill Gap Analysis
             </h2>
