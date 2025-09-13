@@ -64,24 +64,25 @@ const SkillGapForm = () => {
     <>
       <Text />
 
-      <div className="w-full flex justify-center items-center my-10">
+      <div className="w-full flex justify-center items-center my-10 px-3">
         <div
           className="
             card bg-green-100 shadow-sm 
-            w-full max-w-[95%] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] 
+            w-full max-w-[95%] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[800px] xl:max-w-[900px]
             mx-auto
-            min-h-[550px] sm:min-h-[550px] md:min-h-[auto]
+            min-h-[600px] sm:min-h-[620px] md:min-h-[auto]
+            rounded-xl
           "
         >
           <div className="card-body">
-            <h2 className="card-title justify-center text-black font-bold text-2xl">
+            <h2 className="card-title justify-center text-black font-bold text-2xl mb-4">
               Skill Gap Analysis
             </h2>
 
-            <div className="text-black font-bold w-full">
+            <div className="text-black font-bold w-full space-y-5">
               {/* Target Role */}
-              <div className="my-5 w-full">
-                <label className="form-control w-full py-4">
+              <div>
+                <label className="form-control w-full">
                   <div className="label">
                     <span className="label-text px-1">Target Role</span>
                   </div>
@@ -96,12 +97,12 @@ const SkillGapForm = () => {
               </div>
 
               {/* Skill Input */}
-              <div className="my-5 w-full">
-                <label className="form-control w-full py-4">
+              <div>
+                <label className="form-control w-full">
                   <div className="label">
                     <span className="label-text px-1">Add Current Skills</span>
                   </div>
-                  <div className="flex gap-2 flex-col sm:flex-row">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <input
                       type="text"
                       placeholder="e.g., React, Node.js"
@@ -122,7 +123,7 @@ const SkillGapForm = () => {
 
               {/* Current Skills */}
               {currentSkills.length > 0 && (
-                <div className="mb-4 flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
                   {currentSkills.map((skill, i) => (
                     <span
                       key={i}
@@ -143,14 +144,14 @@ const SkillGapForm = () => {
               )}
             </div>
 
-            {/* Validation Error */}
+            {/* Validation/Error */}
             {validationError && (
-              <p className="text-red-400 text-center">{validationError}</p>
+              <p className="text-red-400 text-center mt-3">{validationError}</p>
             )}
-            {error && <p className="text-red-400 text-center">{error}</p>}
+            {error && <p className="text-red-400 text-center mt-3">{error}</p>}
 
             {/* Action Buttons */}
-            <div className="card-actions justify-center flex-wrap gap-3 mt-4">
+            <div className="card-actions justify-center flex-wrap gap-3 mt-6">
               <button
                 className="btn bg-green-400 text-black px-4 py-2 font-bold rounded-xl"
                 onClick={handleSkillGap}
