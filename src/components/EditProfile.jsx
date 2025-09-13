@@ -27,11 +27,9 @@ const EditProfile = () => {
       );
       dispatch(addUser(res?.data?.data));
 
-      // Show toast (optional)
       setShowToast(true);
       setTimeout(() => setShowToast(false), 2000);
 
-      // Redirect to SkillGapForm after save
       navigate("/skillGapForm", { replace: true });
     } catch (error) {
       setError(error?.response?.data || "Something went wrong");
@@ -109,18 +107,23 @@ const EditProfile = () => {
               </label>
             </div>
 
-            {/* Gender */}
+            {/* Gender (Dropdown) */}
             <div className="my-5 w-full">
               <label className="form-control w-full py-4">
                 <div className="label">
                   <span className="label-text px-1">Gender</span>
                 </div>
-                <input
-                  type="text"
+                <select
                   value={gender}
-                  className="input input-bordered w-full bg-gray-200 text-black"
                   onChange={(e) => setGender(e.target.value)}
-                />
+                  className="select select-bordered w-full bg-gray-200 text-black"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </select>
               </label>
             </div>
 
