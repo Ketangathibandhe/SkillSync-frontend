@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUserRoadmaps,
@@ -13,12 +13,12 @@ const RoadmapPage = () => {
     (state) => state.skill
   );
 
-  // Load roadmaps on mount
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
   useEffect(() => {
     dispatch(fetchUserRoadmaps());
   }, [dispatch]);
 
-  // Auto-select first roadmap if none selected
   useEffect(() => {
     if (
       Array.isArray(userRoadmaps) &&
@@ -28,6 +28,13 @@ const RoadmapPage = () => {
       dispatch(fetchRoadmapById(userRoadmaps[0]._id));
     }
   }, [dispatch, userRoadmaps, selectedRoadmap?._id]);
+
+  useEffect(() => {
+    const match = window.matchMedia("(prefers-color-scheme: dark)");
+    setIsDarkTheme(match.matches);
+    match.addEventListener("change", (e) => setIsDarkTheme(e.matches));
+    return () => match.removeEventListener("change", () => {});
+  }, []);
 
   const handleStatusChange = (stepIndex, checked) => {
     if (!selectedRoadmap?._id) return;
@@ -85,7 +92,6 @@ const RoadmapPage = () => {
         {loading && <p className="text-center">Loading roadmap...</p>}
         {error && <p className="text-red-500">{error}</p>}
 
-        {/* Empty state */}
         {!loading && userRoadmaps.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-gray-600">
             <p className="text-lg font-semibold">No roadmap generated yet</p>
@@ -95,14 +101,12 @@ const RoadmapPage = () => {
           </div>
         )}
 
-        {/* No roadmap selected */}
         {!loading &&
           userRoadmaps.length > 0 &&
           !hasSteps && (
             <p className="text-center">No roadmap selected</p>
           )}
 
-        {/* Roadmap UI */}
         {hasSteps && (
           <>
             {/* Progress Bar */}
@@ -113,11 +117,13 @@ const RoadmapPage = () => {
                   (s) => s.status === "completed"
                 ).length;
                 const progress = Number(selectedRoadmap.progress) || 0;
+                const progressTextColor = isDarkTheme ? "text-white" : "text-black";
+
                 return (
                   <div className="border pt-2 pb-3.5 px-2 rounded-2xl">
-                    <div className="flex items-center mb-1 text-2xl pl-4">
+                    <div className={`flex items-center mb-1 text-2xl pl-4 ${progressTextColor}`}>
                       <h4 className="font-semibold">Total Progress</h4>
-                      <span className="font-medium text-white pl-4 text-2xl">
+                      <span className="font-medium pl-4 text-2xl">
                         {completedSteps} / {totalSteps} ({progress}%)
                       </span>
                     </div>
