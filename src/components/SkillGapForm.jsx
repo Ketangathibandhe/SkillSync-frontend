@@ -374,14 +374,14 @@ const SkillGapForm = () => {
               </button>
             </div>
 
-            {/* Output */}
+            {/* Gray Output Box */}
             {loading && (
               <p className="text-center text-xl mt-3 text-black">Processing...</p>
             )}
 
             {gapAnalysis?.skillGap && (
               <div
-                className="bg-gray-200 p-3 rounded mt-4 max-h-[400px] overflow-y-auto text-black text-sm"
+                className="bg-gray-300 p-3 rounded mt-4 max-h-[400px] overflow-y-auto text-black text-sm"
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "#9ca3af #e5e7eb",
@@ -408,7 +408,7 @@ const SkillGapForm = () => {
         </div>
       </div>
 
-      {/* Custom scrollbar for Chrome/Edge */}
+      {/* Custom scrollbar */}
       <style>{`
         div::-webkit-scrollbar {
           width: 8px;
