@@ -64,7 +64,6 @@ const SkillGapForm = () => {
     <>
       <Text />
 
-      {/* Mobile: mt-6 mb-[60px], PC: mt-10 mb-[80px] */}
       <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[80px]">
         <div
           className="
@@ -175,7 +174,13 @@ const SkillGapForm = () => {
             )}
 
             {gapAnalysis && (
-              <div className="bg-gray-100 p-3 rounded mt-4 max-h-[300px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 text-sm">
+              <div
+                className="bg-gray-100 p-3 rounded mt-4 max-h-[300px] overflow-y-scroll text-sm text-black"
+                style={{
+                  scrollbarWidth: "thin", // Firefox
+                  scrollbarColor: "#9ca3af #e5e7eb", // thumb + track
+                }}
+              >
                 <h3 className="font-semibold mb-1 text-black">Skill Gap:</h3>
                 <pre className="whitespace-pre-wrap break-words text-black">
                   {gapAnalysis}
@@ -185,6 +190,20 @@ const SkillGapForm = () => {
           </div>
         </div>
       </div>
+
+      {/* Custom scrollbar for Chrome/Edge */}
+      <style>{`
+        div::-webkit-scrollbar {
+          width: 8px;
+        }
+        div::-webkit-scrollbar-thumb {
+          background-color: #9ca3af;
+          border-radius: 4px;
+        }
+        div::-webkit-scrollbar-track {
+          background-color: #e5e7eb;
+        }
+      `}</style>
     </>
   );
 };
