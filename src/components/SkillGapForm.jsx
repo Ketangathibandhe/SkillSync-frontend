@@ -63,7 +63,6 @@ const SkillGapForm = () => {
   return (
     <>
       <Text />
-
       <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[80px]">
         <div
           className="
@@ -153,16 +152,14 @@ const SkillGapForm = () => {
             {/* Action Buttons */}
             <div className="card-actions justify-center gap-3 mt-6 flex-col sm:flex-row">
               <button
-                className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto disabled:opacity-100 disabled:pointer-events-none"
+                className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto"
                 onClick={handleSkillGap}
-                disabled={loading}
               >
                 Analyze Skill Gap
               </button>
               <button
-                className="btn bg-green-800 text-white font-bold rounded-xl w-full sm:w-auto disabled:opacity-100 disabled:pointer-events-none"
+                className="btn bg-green-800 text-white font-bold rounded-xl w-full sm:w-auto"
                 onClick={handleRoadmap}
-                disabled={loading}
               >
                 Generate Roadmap
               </button>
@@ -175,7 +172,7 @@ const SkillGapForm = () => {
 
             {gapAnalysis && (
               <div
-                className="bg-gray-100 p-3 rounded mt-4 max-h-[300px] overflow-y-scroll text-sm text-black"
+                className="bg-gray-200 p-3 rounded mt-4 max-h-[300px] overflow-y-scroll text-sm text-black"
                 style={{
                   scrollbarWidth: "thin", // Firefox
                   scrollbarColor: "#9ca3af #e5e7eb", // thumb + track
