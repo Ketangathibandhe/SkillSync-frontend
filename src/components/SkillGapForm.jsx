@@ -269,38 +269,33 @@ const SkillGapForm = () => {
     navigate("/roadmap");
   };
 
-  // Render structured gapAnalysis properly
+  // Function to render structured gapAnalysis
   const renderGapAnalysis = () => {
-    if (!gapAnalysis) return null;
+    if (!gapAnalysis || !gapAnalysis.skillGap) return null;
 
-    // gapAnalysis may contain { success, skillGap, rawText }
-    const skillGap = gapAnalysis.skillGap || gapAnalysis;
+    const { missingSkills, learningPriorities } = gapAnalysis.skillGap;
 
     return (
       <div className="text-black">
         {/* Missing Skills */}
-        {skillGap.missingSkills?.length > 0 && (
+        {missingSkills?.length > 0 && (
           <div className="mb-4">
             <h3 className="font-bold text-lg mb-2">Missing Skills</h3>
             <ol className="list-decimal ml-5 space-y-1">
-              {skillGap.missingSkills.map((skill, idx) => (
-                <li key={idx} className="text-black">
-                  {skill}
-                </li>
+              {missingSkills.map((skill, idx) => (
+                <li key={idx}>{skill}</li>
               ))}
             </ol>
           </div>
         )}
 
         {/* Learning Priorities */}
-        {skillGap.learningPriorities?.length > 0 && (
+        {learningPriorities?.length > 0 && (
           <div className="mb-4">
             <h3 className="font-bold text-lg mb-2">Learning Priorities</h3>
             <ol className="list-decimal ml-5 space-y-1">
-              {skillGap.learningPriorities.map((priority, idx) => (
-                <li key={idx} className="text-black">
-                  {priority}
-                </li>
+              {learningPriorities.map((priority, idx) => (
+                <li key={idx}>{priority}</li>
               ))}
             </ol>
           </div>
