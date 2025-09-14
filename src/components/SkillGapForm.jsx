@@ -64,7 +64,7 @@ const SkillGapForm = () => {
     <>
       <Text />
 
-      {/* Mobile: mt-6 mb-[60px], PC: mt-10 mb-[60px] */}
+      {/* Mobile: mt-6 mb-[60px], PC: mt-10 mb-[80px] */}
       <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[80px]">
         <div
           className="
@@ -154,14 +154,14 @@ const SkillGapForm = () => {
             {/* Action Buttons */}
             <div className="card-actions justify-center gap-3 mt-6 flex-col sm:flex-row">
               <button
-                className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto"
+                className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto disabled:opacity-100 disabled:pointer-events-none"
                 onClick={handleSkillGap}
                 disabled={loading}
               >
                 Analyze Skill Gap
               </button>
               <button
-                className="btn bg-green-800 text-white font-bold rounded-xl w-full sm:w-auto"
+                className="btn bg-green-800 text-white font-bold rounded-xl w-full sm:w-auto disabled:opacity-100 disabled:pointer-events-none"
                 onClick={handleRoadmap}
                 disabled={loading}
               >
@@ -175,7 +175,7 @@ const SkillGapForm = () => {
             )}
 
             {gapAnalysis && (
-              <div className="bg-gray-100 p-3 rounded mt-4 max-h-[300px] overflow-auto text-sm">
+              <div className="bg-gray-100 p-3 rounded mt-4 max-h-[300px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 text-sm">
                 <h3 className="font-semibold mb-1 text-black">Skill Gap:</h3>
                 <pre className="whitespace-pre-wrap break-words text-black">
                   {gapAnalysis}
