@@ -227,12 +227,31 @@ const SkillGapForm = () => {
 
   const [skillInput, setSkillInput] = useState("");
   const [validationError, setValidationError] = useState("");
+  const [roadmapError, setRoadmapError] = useState("");
   const navigate = useNavigate();
 
+  const dedupe = (arr) => Array.from(new Set(arr.map((s) => s.trim()).filter(Boolean)));
+
   const handleSkillAdd = () => {
-    if (skillInput.trim() !== "") {
-      dispatch(setCurrentSkills([...currentSkills, skillInput.trim()]));
-      setSkillInput("");
+    if (!skillInput.trim()) return;
+
+    // Support comma-separated entries, trim, dedupe
+    const incoming = skillInput
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (incoming.length === 0) return;
+
+    const merged = dedupe([...currentSkills, ...incoming]);
+    dispatch(setCurrentSkills(merged));
+    setSkillInput("");
+  };
+
+  const handleSkillKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSkillAdd();
     }
   };
 
@@ -243,9 +262,7 @@ const SkillGapForm = () => {
 
   const validateFields = () => {
     if (!targetRole.trim() && currentSkills.length === 0) {
-      setValidationError(
-        "Please enter a target role and add at least one skill."
-      );
+      setValidationError("Please enter a target role and add at least one skill.");
       return false;
     }
     if (!targetRole.trim()) {
@@ -257,6 +274,7 @@ const SkillGapForm = () => {
       return false;
     }
     setValidationError("");
+    setRoadmapError("");
     return true;
   };
 
@@ -267,8 +285,20 @@ const SkillGapForm = () => {
 
   const handleRoadmap = async () => {
     if (!validateFields()) return;
-    await dispatch(generateRoadmap({ targetRole, currentSkills }));
-    navigate("/roadmap");
+    setRoadmapError("");
+
+    const action = await dispatch(generateRoadmap({ targetRole, currentSkills }));
+
+    // Only navigate on fulfilled; otherwise show error
+    if (action?.meta?.requestStatus === "fulfilled") {
+      navigate("/roadmap");
+    } else {
+      const apiError =
+        action?.payload?.error ||
+        action?.error?.message ||
+        "Failed to generate roadmap. Please try again.";
+      setRoadmapError(apiError);
+    }
   };
 
   return (
@@ -315,15 +345,17 @@ const SkillGapForm = () => {
                   <div className="flex flex-col sm:flex-row gap-2">
                     <input
                       type="text"
-                      placeholder="e.g., React, Node.js"
+                      placeholder="e.g., React, Node.js (use commas to add multiple)"
                       value={skillInput}
                       onChange={(e) => setSkillInput(e.target.value)}
+                      onKeyDown={handleSkillKeyDown}
                       className="input input-bordered flex-grow bg-gray-200 text-black"
                     />
                     <button
                       type="button"
                       onClick={handleSkillAdd}
-                      className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto"
+                      disabled={loading}
+                      className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto disabled:opacity-60"
                     >
                       Add
                     </button>
@@ -359,18 +391,23 @@ const SkillGapForm = () => {
               <p className="text-red-400 text-center mt-3">{validationError}</p>
             )}
             {error && <p className="text-red-400 text-center mt-3">{error}</p>}
+            {roadmapError && (
+              <p className="text-red-500 text-center mt-2">{roadmapError}</p>
+            )}
 
             {/* Action Buttons */}
             <div className="card-actions justify-center gap-3 mt-6 flex-col sm:flex-row">
               <button
-                className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto"
+                className="btn bg-green-400 text-black font-bold rounded-xl w-full sm:w-auto disabled:opacity-60"
                 onClick={handleSkillGap}
+                disabled={loading}
               >
                 Analyze Skill Gap
               </button>
               <button
-                className="btn bg-green-800 text-white font-bold rounded-xl w-full sm:w-auto"
+                className="btn bg-green-800 text-white font-bold rounded-xl w-full sm:w-auto disabled:opacity-60"
                 onClick={handleRoadmap}
+                disabled={loading}
               >
                 Generate Roadmap
               </button>
@@ -391,35 +428,35 @@ const SkillGapForm = () => {
               >
                 <h3 className="font-semibold mb-2 text-black">Skill Gap:</h3>
 
-                {/* If JSON object */}
                 {typeof gapAnalysis === "object" && gapAnalysis !== null ? (
                   <>
-                    {gapAnalysis.missingSkills?.length > 0 && (
-                      <div className="mb-3">
-                        <h4 className="font-bold">Missing Skills:</h4>
-                        <ol className="list-decimal list-inside">
-                          {gapAnalysis.missingSkills.map((skill, idx) => (
-                            <li key={idx}>{skill}</li>
-                          ))}
-                        </ol>
-                      </div>
-                    )}
+                    {Array.isArray(gapAnalysis.missingSkills) &&
+                      gapAnalysis.missingSkills.length > 0 && (
+                        <div className="mb-3">
+                          <h4 className="font-bold">Missing Skills:</h4>
+                          <ol className="list-decimal list-inside">
+                            {gapAnalysis.missingSkills.map((skill, idx) => (
+                              <li key={idx}>{skill}</li>
+                            ))}
+                          </ol>
+                        </div>
+                      )}
 
-                    {gapAnalysis.learningPriorities?.length > 0 && (
-                      <div>
-                        <h4 className="font-bold">Learning Priorities:</h4>
-                        <ol className="list-decimal list-inside">
-                          {gapAnalysis.learningPriorities.map((priority, idx) => (
-                            <li key={idx}>{priority}</li>
-                          ))}
-                        </ol>
-                      </div>
-                    )}
+                    {Array.isArray(gapAnalysis.learningPriorities) &&
+                      gapAnalysis.learningPriorities.length > 0 && (
+                        <div>
+                          <h4 className="font-bold">Learning Priorities:</h4>
+                          <ol className="list-decimal list-inside">
+                            {gapAnalysis.learningPriorities.map((priority, idx) => (
+                              <li key={idx}>{priority}</li>
+                            ))}
+                          </ol>
+                        </div>
+                      )}
                   </>
                 ) : (
-                  // Fallback: show as text
                   <pre className="whitespace-pre-wrap break-words text-black">
-                    {gapAnalysis}
+                    {String(gapAnalysis)}
                   </pre>
                 )}
               </div>
