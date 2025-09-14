@@ -230,12 +230,12 @@ const SkillGapForm = () => {
   const [roadmapError, setRoadmapError] = useState("");
   const navigate = useNavigate();
 
-  const dedupe = (arr) => Array.from(new Set(arr.map((s) => s.trim()).filter(Boolean)));
+  const dedupe = (arr) =>
+    Array.from(new Set(arr.map((s) => s.trim()).filter(Boolean)));
 
   const handleSkillAdd = () => {
     if (!skillInput.trim()) return;
 
-    // Support comma-separated entries, trim, dedupe
     const incoming = skillInput
       .split(",")
       .map((s) => s.trim())
@@ -280,6 +280,7 @@ const SkillGapForm = () => {
 
   const handleSkillGap = () => {
     if (!validateFields()) return;
+    setRoadmapError("");
     dispatch(analyzeSkillGap({ targetRole, currentSkills }));
   };
 
@@ -289,7 +290,6 @@ const SkillGapForm = () => {
 
     const action = await dispatch(generateRoadmap({ targetRole, currentSkills }));
 
-    // Only navigate on fulfilled; otherwise show error
     if (action?.meta?.requestStatus === "fulfilled") {
       navigate("/roadmap");
     } else {
@@ -304,6 +304,7 @@ const SkillGapForm = () => {
   return (
     <>
       <Text />
+
       <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[80px]">
         <div
           className="
@@ -422,8 +423,8 @@ const SkillGapForm = () => {
               <div
                 className="bg-gray-200 p-3 rounded mt-4 max-h-[300px] overflow-y-scroll text-sm text-black"
                 style={{
-                  scrollbarWidth: "thin", // Firefox
-                  scrollbarColor: "#9ca3af #e5e7eb", // thumb + track
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "#9ca3af #e5e7eb",
                 }}
               >
                 <h3 className="font-semibold mb-2 text-black">Skill Gap:</h3>
