@@ -64,8 +64,8 @@ const SkillGapForm = () => {
     <>
       <Text />
 
-      {/* Mobile: mt-6 mb-[60px], PC: mt-10 mb-0 */}
-      <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[60px] sm:mb-0">
+      {/* Mobile: mt-6 mb-[60px], PC: mt-10 mb-[60px] */}
+      <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[60px]">
         <div
           className="
             card bg-green-100 shadow-sm 
@@ -171,13 +171,13 @@ const SkillGapForm = () => {
 
             {/* Output */}
             {loading && (
-              <p className="text-center text-sm mt-3">Processing...</p>
+              <p className="text-center text-xl mt-3 text-black">Processing...</p>
             )}
 
             {gapAnalysis && (
               <div className="bg-gray-100 p-3 rounded mt-4 max-h-[300px] overflow-auto text-sm">
-                <h3 className="font-semibold mb-1">Skill Gap:</h3>
-                <pre className="whitespace-pre-wrap break-words">
+                <h3 className="font-semibold mb-1 text-black">Skill Gap:</h3>
+                <pre className="whitespace-pre-wrap break-words text-black">
                   {gapAnalysis}
                 </pre>
               </div>
