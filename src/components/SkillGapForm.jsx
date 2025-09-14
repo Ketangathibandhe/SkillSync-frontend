@@ -65,7 +65,7 @@ const SkillGapForm = () => {
       <Text />
 
       {/* Mobile: mt-6 mb-[60px], PC: mt-10 mb-[60px] */}
-      <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[60px]">
+      <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[80px]">
         <div
           className="
             card bg-green-100 shadow-sm 
