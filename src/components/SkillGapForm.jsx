@@ -269,39 +269,38 @@ const SkillGapForm = () => {
     navigate("/roadmap");
   };
 
-  // Helper: format structured gapAnalysis response
+  // Render structured gapAnalysis properly
   const renderGapAnalysis = () => {
     if (!gapAnalysis) return null;
 
-    // Check if gapAnalysis is already parsed JSON
-    let data = gapAnalysis;
-    if (typeof gapAnalysis === "string") {
-      try {
-        data = JSON.parse(gapAnalysis);
-      } catch {
-        // If parse fails, keep as plain string
-        return <pre className="whitespace-pre-wrap break-words text-black">{gapAnalysis}</pre>;
-      }
-    }
+    // gapAnalysis may contain { success, skillGap, rawText }
+    const skillGap = gapAnalysis.skillGap || gapAnalysis;
 
     return (
-      <div>
-        {data.missingSkills?.length > 0 && (
-          <div className="mb-2">
-            <h4 className="font-semibold text-black">Missing Skills:</h4>
-            <ol className="list-decimal ml-5 text-black">
-              {data.missingSkills.map((skill, idx) => (
-                <li key={idx}>{skill}</li>
+      <div className="text-black">
+        {/* Missing Skills */}
+        {skillGap.missingSkills?.length > 0 && (
+          <div className="mb-4">
+            <h3 className="font-bold text-lg mb-2">Missing Skills</h3>
+            <ol className="list-decimal ml-5 space-y-1">
+              {skillGap.missingSkills.map((skill, idx) => (
+                <li key={idx} className="text-black">
+                  {skill}
+                </li>
               ))}
             </ol>
           </div>
         )}
-        {data.learningPriorities?.length > 0 && (
-          <div className="mb-2">
-            <h4 className="font-semibold text-black">Learning Priorities:</h4>
-            <ol className="list-decimal ml-5 text-black">
-              {data.learningPriorities.map((priority, idx) => (
-                <li key={idx}>{priority}</li>
+
+        {/* Learning Priorities */}
+        {skillGap.learningPriorities?.length > 0 && (
+          <div className="mb-4">
+            <h3 className="font-bold text-lg mb-2">Learning Priorities</h3>
+            <ol className="list-decimal ml-5 space-y-1">
+              {skillGap.learningPriorities.map((priority, idx) => (
+                <li key={idx} className="text-black">
+                  {priority}
+                </li>
               ))}
             </ol>
           </div>
@@ -422,10 +421,10 @@ const SkillGapForm = () => {
 
             {gapAnalysis && (
               <div
-                className="bg-gray-200 p-3 rounded mt-4 max-h-[300px] overflow-y-scroll text-sm text-black"
+                className="bg-gray-200 p-3 rounded mt-4 max-h-[400px] overflow-y-scroll text-sm"
                 style={{
-                  scrollbarWidth: "thin", // Firefox
-                  scrollbarColor: "#9ca3af #e5e7eb", // thumb + track
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "#9ca3af #e5e7eb",
                 }}
               >
                 {renderGapAnalysis()}
