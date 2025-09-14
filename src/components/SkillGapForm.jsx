@@ -273,9 +273,7 @@ const SkillGapForm = () => {
     <>
       <Text />
       <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[80px]">
-        <div
-          className="card bg-green-100 shadow-sm w-full max-w-[95%] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[800px] xl:max-w-[900px] mx-auto rounded-xl sm:min-h-[500px] md:min-h-[500px] lg:min-h-[440px]"
-        >
+        <div className="card bg-green-100 shadow-sm w-full max-w-[95%] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[800px] xl:max-w-[900px] mx-auto rounded-xl sm:min-h-[500px] md:min-h-[500px] lg:min-h-[440px]">
           <div className="card-body">
             <h2 className="card-title justify-center text-black font-bold text-2xl mb-4">
               Skill Gap Analysis
@@ -373,12 +371,12 @@ const SkillGapForm = () => {
               <p className="text-center text-xl mt-3 text-black">Processing...</p>
             )}
 
-            {gapAnalysis?.missingSkills && gapAnalysis?.learningPriorities && (
+            {gapAnalysis?.skillGap?.missingSkills?.length > 0 && (
               <div className="bg-gray-200 p-4 rounded mt-4 max-h-[300px] overflow-y-scroll text-sm text-black space-y-4">
                 <div>
                   <h3 className="font-bold text-lg mb-2">Missing Skills</h3>
                   <ul className="list-decimal ml-5 space-y-1">
-                    {gapAnalysis.missingSkills.map((skill, i) => (
+                    {gapAnalysis.skillGap.missingSkills.map((skill, i) => (
                       <li key={i}>{skill}</li>
                     ))}
                   </ul>
@@ -387,7 +385,7 @@ const SkillGapForm = () => {
                 <div>
                   <h3 className="font-bold text-lg mb-2">Learning Priorities</h3>
                   <ul className="list-decimal ml-5 space-y-1">
-                    {gapAnalysis.learningPriorities.map((priority, i) => (
+                    {gapAnalysis.skillGap.learningPriorities.map((priority, i) => (
                       <li key={i}>{priority}</li>
                     ))}
                   </ul>
