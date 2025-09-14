@@ -46,7 +46,6 @@ const PublicPage = ({ children }) => {
 // Load auth state once for the whole app (refresh-safe + validate session with backend)
 const AuthLoader = ({ children }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,17 +53,16 @@ const AuthLoader = ({ children }) => {
 
     const fetchUser = async () => {
       try {
-        // Always attempt a backend validation call on app start.
-        // This ensures localStorage-based user is validated against server session/cookie.
-        const res = await axios.get(`${BASE_URL}/api/profile/profile/view`, {
-          withCredentials: true,
-        });
+        // Validate session/cookie with backend
+        const res = await axios.get(`${BASE_URL}/api/profile/profile/view`);
         if (!mounted) return;
-        // If backend returns user, update store (also writes to localStorage via addUser)
+
+        // If backend returns user, update Redux + localStorage
         dispatch(addUser(res.data));
       } catch (err) {
-        // If validation fails (e.g., 401), ensure client clears local user state so UI matches server.
         if (!mounted) return;
+
+        // If session expired / invalid, clear local user state
         dispatch(removeUser());
       } finally {
         if (!mounted) return;
@@ -72,8 +70,6 @@ const AuthLoader = ({ children }) => {
       }
     };
 
-    // Call fetchUser regardless of whether `user` exists in localStorage.
-    // This avoids a stale-localstate situation when server cookie/session is missing.
     fetchUser();
 
     return () => {
