@@ -1,4 +1,3 @@
-// path: src/App.jsx
 import "./App.css";
 import {
   BrowserRouter,
@@ -11,7 +10,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import appStore from "./utils/appStore";
-import { addUser, removeUser } from "./utils/userSlice";
+import { addUser } from "./utils/userSlice";
 import { BASE_URL } from "./utils/constants";
 
 // Pages
@@ -24,10 +23,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-// axios default config to send cookies
-axios.defaults.withCredentials = true;
-
-// Layout wrapper
+// Layout with Navbar + Footer
 const Layout = () => (
   <>
     <Navbar />
@@ -36,42 +32,45 @@ const Layout = () => (
   </>
 );
 
-// Redirect logged-in users away from login/signup
+// Redirect away from public pages if already logged in
 const PublicPage = ({ children }) => {
   const user = useSelector((state) => state.user);
   if (user && user.emailId) return <Navigate to="/skillGapForm" replace />;
   return children;
 };
 
-// AuthLoader to validate user on app start
+// Load auth state once for the whole app (refresh-safe)
 const AuthLoader = ({ children }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
-
     const fetchUser = async () => {
       try {
-        // Backend call to check cookie/session
-        const res = await axios.get(`${BASE_URL}/api/profile/profile/view`);
-        if (!mounted) return;
-        dispatch(addUser(res.data)); // update Redux + localStorage
-      } catch (err) {
-        if (!mounted) return;
-        dispatch(removeUser()); // clear local state if session invalid
+        const res = await axios.get(`${BASE_URL}/api/profile/profile/view`, {
+          withCredentials: true,
+        });
+        if (mounted) dispatch(addUser(res.data));
+      } catch {
+        // not logged in is fine
       } finally {
-        if (!mounted) return;
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
 
-    fetchUser();
+    // If user already set (e.g., just signed up or logged in), skip fetch to avoid race
+    if (!user || !user.emailId) {
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
 
     return () => {
       mounted = false;
     };
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   if (loading) {
     return (
@@ -100,6 +99,7 @@ function App() {
                   </PublicPage>
                 }
               />
+              {/* Forgot password public for both logged-in and logged-out */}
               <Route path="forgotpassword" element={<ForgotPasswordForm />} />
 
               {/* Protected routes */}
