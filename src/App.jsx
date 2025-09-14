@@ -24,10 +24,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-// Set axios to send credentials (cookies) by default for all requests
+// axios default config to send cookies
 axios.defaults.withCredentials = true;
 
-// Layout with Navbar + Footer
+// Layout wrapper
 const Layout = () => (
   <>
     <Navbar />
@@ -36,14 +36,14 @@ const Layout = () => (
   </>
 );
 
-// Redirect away from public pages if already logged in
+// Redirect logged-in users away from login/signup
 const PublicPage = ({ children }) => {
   const user = useSelector((state) => state.user);
   if (user && user.emailId) return <Navigate to="/skillGapForm" replace />;
   return children;
 };
 
-// Load auth state once for the whole app (refresh-safe + validate session with backend)
+// AuthLoader to validate user on app start
 const AuthLoader = ({ children }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -53,17 +53,13 @@ const AuthLoader = ({ children }) => {
 
     const fetchUser = async () => {
       try {
-        // Validate session/cookie with backend
+        // Backend call to check cookie/session
         const res = await axios.get(`${BASE_URL}/api/profile/profile/view`);
         if (!mounted) return;
-
-        // If backend returns user, update Redux + localStorage
-        dispatch(addUser(res.data));
+        dispatch(addUser(res.data)); // update Redux + localStorage
       } catch (err) {
         if (!mounted) return;
-
-        // If session expired / invalid, clear local user state
-        dispatch(removeUser());
+        dispatch(removeUser()); // clear local state if session invalid
       } finally {
         if (!mounted) return;
         setLoading(false);
@@ -104,7 +100,6 @@ function App() {
                   </PublicPage>
                 }
               />
-              {/* Forgot password public for both logged-in and logged-out */}
               <Route path="forgotpassword" element={<ForgotPasswordForm />} />
 
               {/* Protected routes */}
