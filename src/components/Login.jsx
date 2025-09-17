@@ -46,7 +46,7 @@ const handleSignUp = async () => {
 
     setTimeout(() => {
       navigate("/profile", { replace: true });
-    }, 0); // ek render cycle ka delay taaki Redux update apply ho jaye
+    }, 0); 
   } catch (err) {
     console.error("Signup Error:", err);
     setError(err?.response?.data || "Something went wrong");

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import formIng from '../images/form.png';
 import Text from "./Text";
 import {
   setTargetRole,
@@ -56,12 +57,11 @@ const SkillGapForm = () => {
 
   const handleRoadmap = async () => {
     if (!validateFields()) return;
-    // Roadmap ke liye rawGap use karna hai agar available ho
     await dispatch(
       generateRoadmap({
         targetRole,
         currentSkills,
-        skillGap: rawGap || "", // backend me handle hoga agar empty ho
+        skillGap: rawGap || "",
       })
     );
     navigate("/roadmap");
@@ -70,6 +70,7 @@ const SkillGapForm = () => {
   return (
     <>
       <Text />
+      {/* Main Skill Gap Form */}
       <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[80px]">
         <div
           className="
@@ -77,7 +78,7 @@ const SkillGapForm = () => {
             w-full max-w-[95%] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[800px] xl:max-w-[900px]
             mx-auto
             rounded-xl
-            sm:min-h-[500px] md:min-h-[500px] lg:min-h-[440px]
+            sm:min-h-[480px] md:min-h-[480px] lg:min-h-[420px]
           "
         >
           <div className="card-body">
@@ -211,7 +212,56 @@ const SkillGapForm = () => {
         </div>
       </div>
 
-      {/* Custom scrollbar for Chrome/Edge */}
+
+      {!gapAnalysis && (
+        <div className="w-full flex justify-center items-center mt-6 sm:mt-10 px-3 mb-[80px]">
+          <div
+            className="
+              card bg-green-100 shadow-sm 
+              w-full max-w-[95%] sm:max-w-[520px] md:max-w-[650px] lg:max-w-[800px] xl:max-w-[900px]
+              mx-auto
+              rounded-xl
+              sm:min-h-[400px] md:min-h-[400px] lg:min-h-[400px]
+            "
+          >
+            <div className="card-body flex flex-col lg:flex-row gap-6 items-center lg:items-center">
+              
+              {/* Instructions Text */}
+              <div className="flex-1">
+                <h2 className="card-title justify-center lg:justify-start text-black font-extrabold text-3xl mb-4">
+                  How to Use SkillSync
+                </h2>
+
+                <ol className="list-decimal list-inside space-y-3 text-black text-lg sm:text-xl font-medium">
+                  <li>Enter your <b>Target Role</b> (e.g., Frontend Developer).</li>
+                  <li>Add your <b>Current Skills</b> one by one using the input field.</li>
+                  <li>You can <b>remove skills</b> anytime by clicking the “×” icon.</li>
+                  <li>Click on <b>Analyze Skill Gap</b> to see which skills are missing.</li>
+                  <li>
+                    After analysis, click <b>Generate Roadmap</b> to get your personalized
+                    learning path.
+                  </li>
+                  <li>
+                    All your <b>saved roadmaps</b> are available in the <b>Profile dropdown</b> 
+                    (top-right corner).
+                  </li>
+                </ol>
+              </div>
+
+              {/* Image */}
+              <div className="flex-1 flex justify-center lg:justify-end items-center">
+                <img 
+                  src={formIng} 
+                  alt="Form Instructions" 
+                  className="max-w-[250px] sm:max-w-[300px] lg:max-w-[350px] h-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom scrollbar */}
       <style>{`
         div::-webkit-scrollbar {
           width: 8px;

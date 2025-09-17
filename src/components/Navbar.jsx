@@ -59,11 +59,11 @@ function NavBar() {
             />
           </div>
 
-          {/* Bigger, Darker, Bolder Downward Arrow */}
+
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6 text-green-600 absolute -bottom-3 left-1/2 -translate-x-1/2 pt-2.5"
-            style={{ marginTop: "6px" }} // extra gap between image & arrow
+            style={{ marginTop: "6px" }}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -77,7 +77,7 @@ function NavBar() {
           </svg>
         </div>
 
-        {/* Dropdown Menu */}
+
         <ul
           tabIndex={0}
           className="menu menu-sm dropdown-content bg-green-100 rounded-box mt-60 w-52 p-2 shadow text-black z-[999]"
